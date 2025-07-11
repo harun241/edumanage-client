@@ -1,7 +1,8 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../../../hooks/useAuth";
+
 
 const AddClass = () => {
   const { user } = useAuth();

@@ -25,7 +25,8 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const navItems = (
+  // সাধারণ ইউজারের ন্যাভ আইটেমস
+  const userNavItems = (
     <>
       <li>
         <NavLink
@@ -33,6 +34,7 @@ const Navbar = () => {
           className={({ isActive }) =>
             isActive ? "text-blue-600 font-semibold" : "text-gray-700"
           }
+          onClick={() => setMobileMenuOpen(false)}
         >
           Home
         </NavLink>
@@ -43,6 +45,7 @@ const Navbar = () => {
           className={({ isActive }) =>
             isActive ? "text-blue-600 font-semibold" : "text-gray-700"
           }
+          onClick={() => setMobileMenuOpen(false)}
         >
           All Classes
         </NavLink>
@@ -53,10 +56,29 @@ const Navbar = () => {
           className={({ isActive }) =>
             isActive ? "text-blue-600 font-semibold" : "text-gray-700"
           }
+          onClick={() => setMobileMenuOpen(false)}
         >
           Teach on EduManage
         </NavLink>
       </li>
+    </>
+  );
+
+  // Admin এর ন্যাভ আইটেমস (অতিরিক্ত)
+  const adminNavItems = (
+    <>
+      <li>
+        <NavLink
+          to="/dashboard/admin/all-classes"
+          className={({ isActive }) =>
+            isActive ? "text-blue-600 font-semibold" : "text-gray-700"
+          }
+          onClick={() => setMobileMenuOpen(false)}
+        >
+          All Classes (Admin)
+        </NavLink>
+      </li>
+      {/* আপনি চাইলে অন্য Admin লিংকগুলোও এখানে যোগ করতে পারেন */}
     </>
   );
 
@@ -70,7 +92,16 @@ const Navbar = () => {
           </div>
 
           {/* Desktop Menu */}
-          <ul className="hidden md:flex space-x-8 list-none">{navItems}</ul>
+          <ul className="hidden md:flex space-x-8 list-none">
+            {user?.role === "admin" ? (
+              <>
+                {adminNavItems}
+                {/* যদি চান, এখানে userNavItems ও দেখাতে পারেন */}
+              </>
+            ) : (
+              userNavItems
+            )}
+          </ul>
 
           {/* Right Side (Profile or Login) */}
           <div className="flex items-center space-x-4 relative" ref={profileRef}>
@@ -183,7 +214,9 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-white shadow-md px-4 pb-4 pt-2">
-          <ul className="space-y-2 list-none">{navItems}</ul>
+          <ul className="space-y-2 list-none">
+            {user?.role === "admin" ? adminNavItems : userNavItems}
+          </ul>
         </div>
       )}
     </nav>

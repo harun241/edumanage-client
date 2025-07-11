@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../../../hooks/useAuth";
+
 
 const MyClass = () => {
   const { user } = useAuth();
