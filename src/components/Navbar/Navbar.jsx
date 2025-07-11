@@ -1,125 +1,192 @@
-import { Link, NavLink } from "react-router"; 
-import { useState, useRef, useEffect } from "react";
-import useAuth from "../../Hooks/useAuth";
+import React, { useState, useRef, useEffect } from "react";
+import { Link, NavLink } from "react-router";
+import useAuth from "../../hooks/useAuth";
 import EduManage from "../Edumanage";
 
 const Navbar = () => {
   const { user, logOut } = useAuth();
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const profileRef = useRef();
 
   const handleLogout = () => {
     logOut()
-      .then(() => {
-        setDropdownOpen(false);
-      })
-      .catch((error) => {
-        console.error("Logout error:", error);
-      });
+      .then(() => setProfileDropdownOpen(false))
+      .catch((error) => console.error("Logout error:", error));
   };
 
-  // Close dropdown if clicked outside
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setDropdownOpen(false);
+    const handleClickOutside = (e) => {
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
+        setProfileDropdownOpen(false);
       }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
     };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const navItems = (
     <>
-    
       <li>
-        <NavLink to="/">Home</NavLink>
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            isActive ? "text-blue-600 font-semibold" : "text-gray-700"
+          }
+        >
+          Home
+        </NavLink>
       </li>
       <li>
-        <NavLink to="/allclasses">All Classes</NavLink>
+        <NavLink
+          to="/allclasses"
+          className={({ isActive }) =>
+            isActive ? "text-blue-600 font-semibold" : "text-gray-700"
+          }
+        >
+          All Classes
+        </NavLink>
       </li>
       <li>
-        <NavLink to="/teach">Teach on EduManage</NavLink>
+        <NavLink
+          to="/teach"
+          className={({ isActive }) =>
+            isActive ? "text-blue-600 font-semibold" : "text-gray-700"
+          }
+        >
+          Teach on EduManage
+        </NavLink>
       </li>
     </>
   );
 
   return (
-    <div>
-      
-      <div className="navbar bg-base-100 shadow-sm">
-        <div className="navbar-start">
-          <EduManage></EduManage>
-          <div className="dropdown">
-            <label tabIndex={0} className="btn btn-ghost lg:hidden">
+    <nav className="w-full bg-white shadow-sm fixed top-0 left-0 z-50">
+      <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16 items-center">
+          {/* Logo */}
+          <div className="flex-shrink-0">
+            <EduManage />
+          </div>
+
+          {/* Desktop Menu */}
+          <ul className="hidden md:flex space-x-8 list-none">{navItems}</ul>
+
+          {/* Right Side (Profile or Login) */}
+          <div className="flex items-center space-x-4 relative" ref={profileRef}>
+            {!user ? (
+              <Link
+                to="/auth/login"
+                className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+              >
+                Sign In
+              </Link>
+            ) : (
+              <>
+                <img
+                  src={user.photoURL || "/default-avatar.png"}
+                  alt="profile"
+                  className="w-10 h-10 rounded-full border-2 border-blue-600 cursor-pointer"
+                  onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                  title={user.displayName || user.email}
+                />
+                {profileDropdownOpen && (
+                  <ul className="absolute right-0 top-14 w-48 bg-white border rounded shadow-md py-2 space-y-1 text-gray-700 z-50">
+                    <li className="px-4 py-2 font-semibold border-b text-center select-none">
+                      {user.displayName || user.email}
+                    </li>
+
+                    {/* Dashboard submenu */}
+                    <li className="relative group">
+                      <span className="block px-4 py-2 cursor-pointer hover:bg-gray-100 font-semibold">
+                        Dashboard ▾
+                      </span>
+                      <ul className="absolute left-full top-0 hidden group-hover:block bg-white border rounded shadow-md w-44 py-2 space-y-1 text-gray-700 z-50">
+                        <li>
+                          <NavLink
+                            to="/dashboard/add-class"
+                            className="block px-4 py-2 hover:bg-gray-100"
+                            onClick={() => setProfileDropdownOpen(false)}
+                          >
+                            Add Class
+                          </NavLink>
+                        </li>
+                        <li>
+                          <NavLink
+                            to="/dashboard/my-class"
+                            className="block px-4 py-2 hover:bg-gray-100"
+                            onClick={() => setProfileDropdownOpen(false)}
+                          >
+                            My Class
+                          </NavLink>
+                        </li>
+                        <li>
+                          <NavLink
+                            to="/dashboard/profile"
+                            className="block px-4 py-2 hover:bg-gray-100"
+                            onClick={() => setProfileDropdownOpen(false)}
+                          >
+                            Profile
+                          </NavLink>
+                        </li>
+                      </ul>
+                    </li>
+
+                    <li>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600"
+                      >
+                        Logout
+                      </button>
+                    </li>
+                  </ul>
+                )}
+              </>
+            )}
+          </div>
+
+          {/* Hamburger for Mobile */}
+          <div className="md:hidden flex items-center">
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-blue-600 focus:outline-none"
+            >
               <svg
+                className="h-6 w-6"
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
+                {mobileMenuOpen ? (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                ) : (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                )}
               </svg>
-            </label>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-50 mt-3 w-52 p-2 shadow"
-            >
-              {navItems}
-            </ul>
+            </button>
           </div>
         </div>
-
-        <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">{navItems}</ul>
-        </div>
-
-        <div className="navbar-end space-x-4 flex items-center">
-          {!user ? (
-            <NavLink to="/auth/login" className="btn btn-sm bg-green-600 text-white">
-              Sign In
-            </NavLink>
-          ) : (
-            <div className="relative" ref={dropdownRef}>
-              <img
-                src={user.photoURL || "/default-avatar.png"}
-                alt="profile"
-                className="w-10 h-10 rounded-full cursor-pointer border-2 border-primary"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-                title={user.displayName || user.email}
-              />
-              {dropdownOpen && (
-                <ul className="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50 p-2 space-y-2">
-                  <li className="text-center font-semibold text-gray-700 border-b pb-2 select-none">
-                    {user.displayName || user.email}
-                  </li>
-                  <li>
-                    <Link
-                      to="/dashboard"
-                      className="block px-4 py-2 hover:bg-gray-100 rounded cursor-pointer"
-                      onClick={() => setDropdownOpen(false)}
-                    >
-                      Dashboard
-                    </Link>
-                  </li>
-                  <li>
-                    <button
-                      onClick={handleLogout}
-                      className="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 rounded cursor-pointer"
-                    >
-                      Logout
-                    </button>
-                  </li>
-                </ul>
-              )}
-            </div>
-          )}
-        </div>
       </div>
-    </div>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-white shadow-md px-4 pb-4 pt-2">
+          <ul className="space-y-2 list-none">{navItems}</ul>
+        </div>
+      )}
+    </nav>
   );
 };
 

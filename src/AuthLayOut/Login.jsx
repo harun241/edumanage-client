@@ -22,7 +22,7 @@ const Login = () => {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate("/dashboard");
+      navigate("/");
     } catch (err) {
       setError(err.message);
     }
@@ -32,7 +32,7 @@ const Login = () => {
     setError("");
     try {
       await signInWithPopup(auth, googleProvider);
-      navigate("/dashboard");
+      navigate("/");
     } catch (err) {
       setError(err.message);
     }

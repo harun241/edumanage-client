@@ -1,12 +1,11 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import auth from "../../Firebase.config";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import auth from "../../Firebase.config"; // Make sure the path is correct
 
-
-
+// Create context
 const Authcontext = createContext(null);
 
-// Custom Hook
+// Custom Hook (can be in separate file if needed)
 export const useAuth = () => useContext(Authcontext);
 
 // Provider Component
@@ -20,10 +19,12 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
     });
 
-    return () => unsubscribe();
+    return () => unsubscribe(); // Clean up on unmount
   }, []);
 
-  const authInfo = { user, loading };
+  const logOut = () => signOut(auth); // Logout function
+
+  const authInfo = { user, loading, logOut };
 
   return (
     <Authcontext.Provider value={authInfo}>
@@ -31,4 +32,5 @@ export const AuthProvider = ({ children }) => {
     </Authcontext.Provider>
   );
 };
+
 export default Authcontext;

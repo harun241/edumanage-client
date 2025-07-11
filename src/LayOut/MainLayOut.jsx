@@ -3,7 +3,7 @@ import Home from '../Pages/Home';
 
 const MainLayOut = () => {
     return (
-        <div>
+        <div className='w-full'>
          
              <Home></Home>
             
