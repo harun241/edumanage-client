@@ -3,7 +3,7 @@ import React from 'react';
 const EnrolledClassDetails = () => {
     return (
         <div>
-            enrolled classs
+            enrolled
         </div>
     );
 };

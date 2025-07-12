@@ -2,10 +2,10 @@ import React from "react";
 import useAuth from "../../../hooks/useAuth";
 
 
-const Profile = () => {
+const TeacherProfile = () => {
   const { user } = useAuth();
 
-  const role = user?.role || "Student"; // or "Teacher", "Admin"
+  const role = user?.role || "Student"; 
   const phone = user?.phone || "+880123456789";
 
   return (
@@ -49,4 +49,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default TeacherProfile;

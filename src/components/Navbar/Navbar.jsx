@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link, NavLink } from "react-router";
+import { Link, NavLink } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import EduManage from "../Edumanage";
 
@@ -25,7 +25,13 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // সাধারণ ইউজারের ন্যাভ আইটেমস
+  const getDashboardPath = () => {
+    if (user?.role === "admin") return "/dashboard/admin";
+    if (user?.role === "teacher") return "/dashboard/teacher";
+    if (user?.role === "student") return "/dashboard/student";
+    return "/dashboard";
+  };
+
   const userNavItems = (
     <>
       <li>
@@ -61,10 +67,20 @@ const Navbar = () => {
           Teach on EduManage
         </NavLink>
       </li>
+      <li>
+        <NavLink
+          to={getDashboardPath()}
+          className={({ isActive }) =>
+            isActive ? "text-blue-600 font-semibold" : "text-gray-700"
+          }
+          onClick={() => setMobileMenuOpen(false)}
+        >
+          Dashboard
+        </NavLink>
+      </li>
     </>
   );
 
-  // Admin এর ন্যাভ আইটেমস (অতিরিক্ত)
   const adminNavItems = (
     <>
       <li>
@@ -78,7 +94,17 @@ const Navbar = () => {
           All Classes (Admin)
         </NavLink>
       </li>
-      {/* আপনি চাইলে অন্য Admin লিংকগুলোও এখানে যোগ করতে পারেন */}
+      <li>
+        <NavLink
+          to="/dashboard/admin"
+          className={({ isActive }) =>
+            isActive ? "text-blue-600 font-semibold" : "text-gray-700"
+          }
+          onClick={() => setMobileMenuOpen(false)}
+        >
+          Dashboard
+        </NavLink>
+      </li>
     </>
   );
 
@@ -88,19 +114,14 @@ const Navbar = () => {
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <EduManage />
+            <Link to="/">
+              <EduManage />
+            </Link>
           </div>
 
           {/* Desktop Menu */}
           <ul className="hidden md:flex space-x-8 list-none">
-            {user?.role === "admin" ? (
-              <>
-                {adminNavItems}
-                {/* যদি চান, এখানে userNavItems ও দেখাতে পারেন */}
-              </>
-            ) : (
-              userNavItems
-            )}
+            {user?.role === "admin" ? adminNavItems : userNavItems}
           </ul>
 
           {/* Right Side (Profile or Login) */}
@@ -116,57 +137,53 @@ const Navbar = () => {
               <>
                 <img
                   src={user.photoURL || "/default-avatar.png"}
-                  alt="profile"
+                  alt={user.displayName || user.email}
                   className="w-10 h-10 rounded-full border-2 border-blue-600 cursor-pointer"
                   onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
                   title={user.displayName || user.email}
                 />
                 {profileDropdownOpen && (
-                  <ul className="absolute right-0 top-14 w-48 bg-white border rounded shadow-md py-2 space-y-1 text-gray-700 z-50">
-                    <li className="px-4 py-2 font-semibold border-b text-center select-none">
-                      {user.displayName || user.email}
+                  <ul className="absolute right-0 top-14 w-64 bg-white border rounded shadow-md py-4 px-4 space-y-3 text-gray-700 z-50">
+                    <li className="flex items-center space-x-4">
+                      <img
+                        src={user.photoURL || "/default-avatar.png"}
+                        alt={user.displayName || "User Avatar"}
+                        className="w-16 h-16 rounded-full border-2 border-blue-600"
+                      />
+                      <div>
+                        <p className="font-semibold text-lg">{user.displayName || "No Name"}</p>
+                        <p className="text-sm text-gray-500 capitalize">{user.role || "student"}</p>
+                      </div>
                     </li>
 
-                    {/* Dashboard submenu */}
-                    <li className="relative group">
-                      <span className="block px-4 py-2 cursor-pointer hover:bg-gray-100 font-semibold">
-                        Dashboard ▾
-                      </span>
-                      <ul className="absolute left-full top-0 hidden group-hover:block bg-white border rounded shadow-md w-44 py-2 space-y-1 text-gray-700 z-50">
-                        <li>
-                          <NavLink
-                            to="/dashboard/add-class"
-                            className="block px-4 py-2 hover:bg-gray-100"
-                            onClick={() => setProfileDropdownOpen(false)}
-                          >
-                            Add Class
-                          </NavLink>
-                        </li>
-                        <li>
-                          <NavLink
-                            to="/dashboard/my-class"
-                            className="block px-4 py-2 hover:bg-gray-100"
-                            onClick={() => setProfileDropdownOpen(false)}
-                          >
-                            My Class
-                          </NavLink>
-                        </li>
-                        <li>
-                          <NavLink
-                            to="/dashboard/profile"
-                            className="block px-4 py-2 hover:bg-gray-100"
-                            onClick={() => setProfileDropdownOpen(false)}
-                          >
-                            Profile
-                          </NavLink>
-                        </li>
-                      </ul>
+                    <li>
+                      <p><strong>Email:</strong> {user.email}</p>
+                    </li>
+                    <li>
+                      <p><strong>Phone:</strong> {user.phone || "+880123456789"}</p>
+                    </li>
+
+                    <li className="border-t pt-3">
+                      <NavLink
+                        to={getDashboardPath()}
+                        className="block px-4 py-2 hover:bg-gray-100 rounded"
+                        onClick={() => setProfileDropdownOpen(false)}
+                      >
+                        Dashboard
+                      </NavLink>
+                      <NavLink
+                        to={`${getDashboardPath()}/profile`}
+                        className="block px-4 py-2 hover:bg-gray-100 rounded mt-1"
+                        onClick={() => setProfileDropdownOpen(false)}
+                      >
+                        Profile
+                      </NavLink>
                     </li>
 
                     <li>
                       <button
                         onClick={handleLogout}
-                        className="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600"
+                        className="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600 rounded"
                       >
                         Logout
                       </button>

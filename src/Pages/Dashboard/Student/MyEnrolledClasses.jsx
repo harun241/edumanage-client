@@ -3,7 +3,7 @@ import React from 'react';
 const MyEnrolledClasses = () => {
     return (
         <div>
-            my enrolled class
+            my e
         </div>
     );
 };

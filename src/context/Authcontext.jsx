@@ -1,36 +1,54 @@
-import { createContext, useContext, useEffect, useState } from "react";
+// src/context/AuthContext.jsx
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import auth from "../../Firebase.config"; // Make sure the path is correct
+import axios from "axios";
+import { auth } from "../../Firebase.config";
 
-// Create context
-const Authcontext = createContext(null);
 
-// Custom Hook (can be in separate file if needed)
-export const useAuth = () => useContext(Authcontext);
+const AuthContext = createContext(null);
 
-// Provider Component
+export const useAuth = () => useContext(AuthContext);
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        try {
+          const res = await axios.get(`/api/users/role?email=${currentUser.email}`);
+          const role = res?.data?.role || "student";
+          setUser({
+            displayName: currentUser.displayName,
+            email: currentUser.email,
+            photoURL: currentUser.image,
+            role,
+          });
+        } catch (error) {
+          setUser({
+            displayName: currentUser.displayName,
+            email: currentUser.email,
+            photoURL: currentUser.image,
+            role: "student",
+          });
+        }
+      } else {
+        setUser(null);
+      }
       setLoading(false);
     });
 
-    return () => unsubscribe(); // Clean up on unmount
+    return () => unsubscribe();
   }, []);
 
-  const logOut = () => signOut(auth); // Logout function
-
-  const authInfo = { user, loading, logOut };
+  const logOut = () => signOut(auth);
 
   return (
-    <Authcontext.Provider value={authInfo}>
+    <AuthContext.Provider value={{ user, loading, logOut }}>
       {!loading && children}
-    </Authcontext.Provider>
+    </AuthContext.Provider>
   );
 };
 
-export default Authcontext;
+export default AuthContext;
