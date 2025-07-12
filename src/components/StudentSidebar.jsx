@@ -14,16 +14,7 @@ const StudentSidebar = () => (
           My Enrolled Classes
         </NavLink>
       </li>
-      <li>
-        <NavLink
-          to="/dashboard/student/orders"
-          className={({ isActive }) =>
-            isActive ? "text-primary font-semibold" : "hover:text-primary"
-          }
-        >
-          Orders
-        </NavLink>
-      </li>
+      
       <li>
         <NavLink
           to="/dashboard/student/profile"

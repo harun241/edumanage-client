@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router"; // react-router-dom ব্যবহার করো
+import { useNavigate, Link } from "react-router"; 
+import { FcGoogle } from "react-icons/fc";
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -81,7 +82,7 @@ const Login = () => {
         className="btn btn-outline w-full mt-4 flex justify-center items-center space-x-2"
       >
     
-        <span>Login with Google</span>
+        <span className="flex items-center gap-4"><FcGoogle className="size-8"/>Login with Google</span>
       </button>
 
       <p className="mt-4 text-center">

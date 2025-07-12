@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router";
+import { useNavigate, Link } from "react-router-dom";
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [photoURL, setPhotoURL] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   const auth = getAuth();
 
   const handleSubmit = async (e) => {
@@ -16,13 +17,33 @@ const Register = () => {
     setError("");
 
     try {
+      // 1. Create Firebase user
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const firebaseUser = userCredential.user;
 
-      // Update display name after registration
-      await updateProfile(userCredential.user, { displayName: name });
+      // 2. Update displayName and photoURL
+      await updateProfile(firebaseUser, {
+        displayName: name,
+        photoURL,
+      });
 
-      navigate("/dashboard"); // redirect after successful register
+      // 3. Save user to backend
+      await fetch("http://localhost:3000/api/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          photo: photoURL,
+        }),
+      });
+
+      // ✅ Optional: Toast / alert can go here for success
+
+      // 4. Redirect to login
+      navigate("/auth/login");
     } catch (err) {
+      console.error(err);
       setError(err.message);
     }
   };
@@ -43,6 +64,17 @@ const Register = () => {
             onChange={(e) => setName(e.target.value)}
             required
             autoComplete="name"
+          />
+        </div>
+         <div>
+          <label>Photo URL</label>
+          <input
+            type="url"
+            className="input input-bordered w-full"
+            value={photoURL}
+            onChange={(e) => setPhotoURL(e.target.value)}
+            required
+            autoComplete="photo"
           />
         </div>
 
@@ -70,6 +102,8 @@ const Register = () => {
           />
         </div>
 
+       
+
         <button type="submit" className="btn btn-primary w-full">
           Register
         </button>
@@ -77,7 +111,7 @@ const Register = () => {
 
       <p className="mt-4 text-center">
         Already have an account?{" "}
-        <Link to="/login" className="text-blue-600 underline">
+        <Link to="/auth/login" className="text-blue-600 underline">
           Login here
         </Link>
       </p>
