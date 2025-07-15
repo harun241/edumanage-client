@@ -25,6 +25,22 @@ const StudentSidebar = () => (
           Profile
         </NavLink>
       </li>
+
+      <li>
+        <NavLink
+          to="/dashboard/student/teacher-request"
+          className={({ isActive }) =>
+            isActive
+              ? "text-primary font-semibold"
+              : "hover:text-primary transition-colors duration-200"
+          }
+          aria-current={({ isActive }) => (isActive ? "page" : undefined)}
+        >
+          Teacher-Request-form
+        </NavLink>
+
+        
+      </li>
     </ul>
   </nav>
 );

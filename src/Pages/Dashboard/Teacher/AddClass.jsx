@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 
-
 const AddClass = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -18,19 +17,23 @@ const AddClass = () => {
     const classData = {
       ...data,
       name: user?.displayName || "",
-      email: user?.email || "",
       status: "pending",
     };
 
     try {
       const res = await fetch("http://localhost:3000/classes", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-user-email": user?.email,   // ✅ Added this line
+          "x-user-role": "teacher",      // ✅ Optional: helpful for role-based logic
+        },
         body: JSON.stringify(classData),
       });
+
       const result = await res.json();
       if (result.insertedId) {
-        alert("Class added successfully!");
+         alert("Class added successfully!");
         navigate("/dashboard/my-class");
       }
     } catch (err) {
@@ -45,9 +48,7 @@ const AddClass = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
 
         <div>
-          <label htmlFor="title" className="block mb-1 font-medium">
-            Title
-          </label>
+          <label htmlFor="title" className="block mb-1 font-medium">Title</label>
           <input
             id="title"
             {...register("title", { required: "Title is required" })}
@@ -55,19 +56,11 @@ const AddClass = () => {
               errors.title ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-blue-500"
             }`}
           />
-          {errors.title && (
-            <p className="text-red-600 mt-1 text-sm">{errors.title.message}</p>
-          )}
+          {errors.title && <p className="text-red-600 mt-1 text-sm">{errors.title.message}</p>}
         </div>
 
-       
-
-       
-
         <div>
-          <label htmlFor="price" className="block mb-1 font-medium">
-            Price
-          </label>
+          <label htmlFor="price" className="block mb-1 font-medium">Price</label>
           <input
             id="price"
             type="number"
@@ -79,15 +72,11 @@ const AddClass = () => {
               errors.price ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-blue-500"
             }`}
           />
-          {errors.price && (
-            <p className="text-red-600 mt-1 text-sm">{errors.price.message}</p>
-          )}
+          {errors.price && <p className="text-red-600 mt-1 text-sm">{errors.price.message}</p>}
         </div>
 
         <div>
-          <label htmlFor="description" className="block mb-1 font-medium">
-            Description
-          </label>
+          <label htmlFor="description" className="block mb-1 font-medium">Description</label>
           <textarea
             id="description"
             {...register("description", { required: "Description is required" })}
@@ -96,25 +85,20 @@ const AddClass = () => {
               errors.description ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-blue-500"
             }`}
           />
-          {errors.description && (
-            <p className="text-red-600 mt-1 text-sm">{errors.description.message}</p>
-          )}
+          {errors.description && <p className="text-red-600 mt-1 text-sm">{errors.description.message}</p>}
         </div>
 
         <div>
-          <label htmlFor="image" className="block mb-1 font-medium">
-            Image URL
-          </label>
+          <label htmlFor="image" className="block mb-1 font-medium">Image URL</label>
           <input
             id="image"
             {...register("image")}
             className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-         <div>
-          <label htmlFor="name" className="block mb-1 font-medium">
-            Name
-          </label>
+
+        <div>
+          <label htmlFor="name" className="block mb-1 font-medium">Name</label>
           <input
             id="name"
             type="text"
@@ -124,10 +108,8 @@ const AddClass = () => {
           />
         </div>
 
-         <div>
-          <label htmlFor="email" className="block mb-1 font-medium">
-            Email
-          </label>
+        <div>
+          <label htmlFor="email" className="block mb-1 font-medium">Email</label>
           <input
             id="email"
             type="email"

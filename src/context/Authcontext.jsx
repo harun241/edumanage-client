@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
             displayName: currentUser.displayName,
             email: currentUser.email,
             photoURL: currentUser.photoURL || "",
-            role: "student", // fallback
+            role: "student", 
           });
         }
       } else {

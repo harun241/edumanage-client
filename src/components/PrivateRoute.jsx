@@ -1,16 +1,16 @@
-import React from 'react';
-import { Navigate, Outlet } from 'react-router';
-import useAuth from '../hooks/useAuth';
+import React from "react";
+import { Navigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
+const PrivateRoute = ({ children }) => {
+  const { user } = useAuth();
 
-const PrivateRoute = () => {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return <div>Loading...</div>; 
+  if (!user) {
+    // Redirect to login if not logged in
+    return <Navigate to="/auth/login" replace />;
   }
 
-  return user ? <Outlet /> : <Navigate to="/login" replace />;
+  return children;
 };
 
 export default PrivateRoute;

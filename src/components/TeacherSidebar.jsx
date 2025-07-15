@@ -41,7 +41,11 @@ const TeacherSidebar = () => (
         >
           Profile
         </NavLink>
+
+
       </li>
+
+      
     </ul>
   </nav>
 );

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 
+const BACKEND = "http://localhost:3000";
 
 const MyClass = () => {
   const { user } = useAuth();
@@ -14,7 +15,8 @@ const MyClass = () => {
   });
 
   useEffect(() => {
-    fetch(`http://localhost:3000/classes?email=${user?.email}`)
+    if (!user?.email) return;
+    fetch(`${BACKEND}/classes?email=${user.email}`)
       .then((res) => res.json())
       .then((data) => setClasses(data))
       .catch(console.error);
@@ -23,11 +25,19 @@ const MyClass = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure to delete this class?")) return;
     try {
-      const res = await fetch(`http://localhost:3000/classes/${id}`, {
+      const res = await fetch(`${BACKEND}/classes/${id}`, {
         method: "DELETE",
+        headers: {
+          "x-user-email": user.email,
+          "x-user-role": user.role || "teacher",
+        },
       });
+      const result = await res.json();
       if (res.ok) {
         setClasses(classes.filter((c) => c._id !== id));
+        alert("Class deleted!");
+      } else {
+        alert(result.error || "Delete failed");
       }
     } catch (err) {
       console.error(err);
@@ -51,19 +61,25 @@ const MyClass = () => {
 
   const handleUpdateSubmit = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/classes/${editingClass._id}`, {
+      const res = await fetch(`${BACKEND}/classes/${editingClass._id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-user-email": user.email,
+          "x-user-role": user.role || "teacher",
+        },
         body: JSON.stringify(formData),
       });
       const result = await res.json();
-      if (result.modifiedCount > 0 || result.matchedCount > 0) {
+      if (result.modifiedCount > 0) {
         alert("✅ Class updated successfully!");
         const updated = classes.map((cls) =>
           cls._id === editingClass._id ? { ...cls, ...formData } : cls
         );
         setClasses(updated);
         setEditingClass(null);
+      } else {
+        alert("No change made or unauthorized.");
       }
     } catch (err) {
       console.error(err);
@@ -83,7 +99,6 @@ const MyClass = () => {
             key={cls._id}
             className="bg-white rounded-lg border shadow p-4 space-y-3"
           >
-            {/* Image */}
             {cls.image && (
               <img
                 src={cls.image}
@@ -92,7 +107,6 @@ const MyClass = () => {
               />
             )}
 
-            {/* Info */}
             <h3 className="text-2xl font-semibold text-gray-800">
               {cls.title}
             </h3>
@@ -121,7 +135,6 @@ const MyClass = () => {
               </span>
             </p>
 
-            {/* Buttons */}
             <div className="flex gap-4 mt-4">
               <button
                 onClick={() => handleUpdate(cls)}
@@ -151,7 +164,6 @@ const MyClass = () => {
         ))}
       </div>
 
-      {/* Update Modal */}
       {editingClass && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-lg shadow-md space-y-4 relative">
@@ -175,7 +187,10 @@ const MyClass = () => {
                 className="w-full border p-2 rounded"
                 value={formData.price}
                 onChange={(e) =>
-                  setFormData({ ...formData, price: parseFloat(e.target.value) })
+                  setFormData({
+                    ...formData,
+                    price: parseFloat(e.target.value),
+                  })
                 }
               />
             </div>
@@ -186,7 +201,10 @@ const MyClass = () => {
                 className="w-full border p-2 rounded"
                 value={formData.description}
                 onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
+                  setFormData({
+                    ...formData,
+                    description: e.target.value,
+                  })
                 }
               />
             </div>
