@@ -50,7 +50,7 @@ const AddClass = () => {
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white rounded shadow-md mt-10">
+    <div className="max-w-xl mx-auto p-6 bg-white rounded shadow-md ">
       <h2 className="text-2xl font-semibold mb-6 text-center">Add a New Class</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         {/* Title */}

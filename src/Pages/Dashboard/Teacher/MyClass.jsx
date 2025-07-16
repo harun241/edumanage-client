@@ -88,8 +88,8 @@ const MyClass = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-10">
-      <h2 className="text-3xl font-bold mb-6 text-blue-600">My Classes</h2>
+    <div className="max-w-6xl mx-auto px-4 ">
+      <h2 className="text-3xl font-bold mb-6 text-center">My Classes</h2>
 
       {classes.length === 0 && <p>No classes found.</p>}
 

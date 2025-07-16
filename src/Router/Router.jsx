@@ -8,7 +8,7 @@ import TeacherDashboardLayout from "../layout/TeacherDashboardLayout";
 import AdminDashboardLayout from "../layout/AdminDashboardLayout";
 import AllClassesLayout from "../layout/AllClassesLayout"; // for /all-classes
 
-// Pages (Public)
+// Public Pages
 import Home from "../pages/Home";
 import Login from "../AuthLayOut/Login";
 import Register from "../AuthLayOut/Register";
@@ -35,17 +35,18 @@ import EnrolledClassDetails from "../pages/Dashboard/Student/EnrolledClassDetail
 import Orders from "../pages/Dashboard/Student/Orders";
 import StudentProfile from "../pages/Dashboard/Student/StudentProfile";
 
+// Other Pages
 import ClassDetails from "../pages/ClassDetails"; // case-sensitive import
-import TeacherRequestForm from "../Pages/Dashboard/Teacher/TeacherRequestForm";
+
+// Teacher Request Form (correct import path, adjust if your folder is 'pages' lowercase)
+import TeacherRequestForm from "../pages/Dashboard/Teacher/TeacherRequestForm";
 
 export const router = createBrowserRouter([
+  // Public routes
   {
     path: "/",
     element: <MainLayOut />,
-    children: [
-      { index: true, element: <Home /> },
-     
-    ],
+    children: [{ index: true, element: <Home /> }],
   },
 
   {
@@ -57,11 +58,12 @@ export const router = createBrowserRouter([
     ],
   },
 
+  // Classes listing & details - partially protected
   {
     path: "/all-classes",
     element: <AllClassesLayout />, // renders <Outlet />
     children: [
-      { index: true, element: <AllClasses /> }, // classes list page
+      { index: true, element: <AllClasses /> }, // public class list page
       {
         path: "class/:id",
         element: (
@@ -73,6 +75,7 @@ export const router = createBrowserRouter([
     ],
   },
 
+  // Dashboard routes - fully protected & role based
   {
     path: "/dashboard",
     element: (
@@ -81,6 +84,7 @@ export const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
+      // Admin Dashboard
       {
         path: "admin",
         element: <AdminDashboardLayout />,
@@ -92,6 +96,8 @@ export const router = createBrowserRouter([
           { path: "profile", element: <AdminProfile /> },
         ],
       },
+
+      // Teacher Dashboard
       {
         path: "teacher",
         element: <TeacherDashboardLayout />,
@@ -101,9 +107,10 @@ export const router = createBrowserRouter([
           { path: "my-class", element: <MyClass /> },
           { path: "my-classes/:id", element: <TeacherClassDetails /> },
           { path: "profile", element: <TeacherProfile /> },
-   
         ],
       },
+
+      // Student Dashboard
       {
         path: "student",
         element: <StudentDashboardLayout />,
@@ -113,7 +120,16 @@ export const router = createBrowserRouter([
           { path: "my-classes/:id", element: <EnrolledClassDetails /> },
           { path: "orders", element: <Orders /> },
           { path: "profile", element: <StudentProfile /> },
-          { path: "teacher-request", element: <TeacherRequestForm/> },
+
+          // Corrected path here (relative path, no leading slash)
+          {
+            path: "teach",
+            element: (
+              <PrivateRoute>
+                <TeacherRequestForm />
+              </PrivateRoute>
+            ),
+          },
         ],
       },
     ],

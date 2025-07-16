@@ -1,7 +1,6 @@
 import React from "react";
 import useAuth from "../../../hooks/useAuth";
 
-
 const TeacherProfile = () => {
   const { user } = useAuth();
 
@@ -9,7 +8,7 @@ const TeacherProfile = () => {
   const phone = user?.phone || "+880123456789";
 
   return (
-    <div className="max-w-3xl mx-auto mt-20 p-6 bg-white rounded shadow-md">
+    <div className="max-w-3xl mx-auto mt-20 p-6 bg-white rounded shadow-md ">
       <h1 className="text-3xl font-bold mb-6">User Profile</h1>
 
       <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
@@ -18,7 +17,7 @@ const TeacherProfile = () => {
           <img
             src={user?.photoURL || "/default-avatar.png"}
             alt={user?.displayName || "User Avatar"}
-            className="w-40 h-40 rounded-full object-cover border-4 border-blue-600"
+            className="w-40 h-40 rounded-full object-cover border-4 shadow-2xl border-blue-500"
           />
         </div>
 

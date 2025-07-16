@@ -6,6 +6,7 @@ import { useAuth } from "../context/AuthContext";
 import AdminSidebar from "./AdminSidebar";
 import TeacherSidebar from "./TeacherSidebar";
 import StudentSidebar from "./StudentSidebar";
+import Loader from "./Loader";
 
 const RoleBasedDashboard = () => {
   const { user, loading } = useAuth();
@@ -30,7 +31,7 @@ const RoleBasedDashboard = () => {
     return <StudentSidebar />;
   };
 
-  if (loading) return <p className="text-center mt-10">Loading...</p>;
+  if (loading) return <Loader></Loader>
 
   return (
     <div className="min-h-screen grid grid-cols-12">
