@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Loader from '../../../components/Loader';
 
 const TeacherRequest = () => {
   const [requests, setRequests] = useState([]);
@@ -10,16 +11,15 @@ const TeacherRequest = () => {
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-        // Adjust baseURL if needed
         const res = await axios.get('http://localhost:3000/api/users/teacher-requests', {
           headers: {
-            'x-user-email': 'admin@example.com',  // এখানে admin এর email দিন বা context থেকে নিন
-            'x-user-role': 'admin',                // অবশ্যই admin role দিতে হবে
-          }
+            'x-user-email': 'admin@example.com', // Replace with dynamic email from context if available
+            'x-user-role': 'admin',
+          },
         });
         setRequests(res.data);
       } catch (err) {
-        setError('Failed to load requests');
+        setError('❌ Failed to load requests');
       } finally {
         setLoading(false);
       }
@@ -35,11 +35,11 @@ const TeacherRequest = () => {
         headers: {
           'x-user-email': 'admin@example.com',
           'x-user-role': 'admin',
-        }
+        },
       });
-      setRequests(prev => prev.filter(r => r.email !== email));
+      setRequests((prev) => prev.filter((r) => r.email !== email));
     } catch {
-      alert('Approve failed');
+      alert('❌ Approve failed');
     }
   };
 
@@ -50,31 +50,47 @@ const TeacherRequest = () => {
         headers: {
           'x-user-email': 'admin@example.com',
           'x-user-role': 'admin',
-        }
+        },
       });
-      setRequests(prev => prev.filter(r => r.email !== email));
+      setRequests((prev) => prev.filter((r) => r.email !== email));
     } catch {
-      alert('Deny failed');
+      alert('❌ Deny failed');
     }
   };
+  if (loading) return <Loader/>;
 
-  if (loading) return <p>Loading requests...</p>;
-  if (error) return <p>{error}</p>;
-  if (requests.length === 0) return <p>No pending teacher requests.</p>;
+  if (error) return <p className="text-center text-red-600 mt-10">{error}</p>;
+  if (requests.length === 0) return <p className="text-center text-gray-600 mt-10">No pending teacher requests.</p>;
 
   return (
-    <div>
-      <h2>Teacher Requests</h2>
-      <ul>
+    <div className="max-w-5xl mx-auto p-6">
+      <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">Pending Teacher Requests</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {requests.map(({ _id, name, email }) => (
-          <li key={_id} style={{ marginBottom: '1rem', border: '1px solid #ccc', padding: '0.5rem' }}>
-            <p><strong>Name:</strong> {name}</p>
-            <p><strong>Email:</strong> {email}</p>
-            <button onClick={() => handleApprove(email)} style={{ marginRight: '1rem' }}>Approve</button>
-            <button onClick={() => handleDeny(email)}>Deny</button>
-          </li>
+          <div
+            key={_id}
+            className="bg-white rounded-xl shadow-md p-5 border border-gray-200 hover:shadow-lg transition"
+          >
+            <p className="text-lg font-semibold text-gray-700 mb-2">👤 {name || 'No Name Provided'}</p>
+            <p className="text-sm text-gray-600 mb-4">📧 {email}</p>
+
+            <div className="flex gap-2">
+              <button
+                onClick={() => handleApprove(email)}
+                className="   bg-green-600 hover:bg-green-800 text-white py-2 px-4 rounded-md transition duration-200"
+              >
+                 Approve
+              </button>
+              <button
+                onClick={() => handleDeny(email)}
+                className=" bg-red-600 hover:bg-gray-500 text-white py-2  px-4 rounded-md transition duration-200"
+              >
+                 Deny
+              </button>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };

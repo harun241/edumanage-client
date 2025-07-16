@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import Loader from "../../../components/Loader";
+
 
 const BACKEND = "http://localhost:3000";
 
@@ -23,14 +25,14 @@ const AllClasses = () => {
     };
     fetchClasses();
   }, []);
+    if (loading) return <Loader></Loader>;
 
-  if (loading) return <p className="text-center mt-10">Loading classes...</p>;
   if (error) return <p className="text-center text-red-500">{error}</p>;
   if (!classes.length) return <p className="text-center">No classes found.</p>;
 
   return (
    <div>
-    <h1 className="font-bold text-center text-4xl my-20">All Classes</h1>
+    <h1 className="font-bold text-center text-4xl ">All Classes</h1>
      <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
      
       {classes.map((cls) => (
@@ -51,6 +53,7 @@ const AllClasses = () => {
           >
             Enroll Now
           </Link>
+          
         </div>
       ))}
     </div>

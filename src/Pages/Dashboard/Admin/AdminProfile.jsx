@@ -9,6 +9,7 @@ const AdminProfile = () => {
   const phone = user?.phone || "+880123456789";
 
   return (
+
     <div className="max-w-3xl mx-auto mt-20 p-6 bg-white rounded shadow-md">
       <h1 className="text-3xl font-bold mb-6">User Profile</h1>
 

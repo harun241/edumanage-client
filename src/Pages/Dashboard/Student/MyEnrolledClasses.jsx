@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../../hooks/useAuth';
 import { Link } from 'react-router-dom';
+import Loader from '../../../components/Loader';
 
 const MyEnrolledClasses = () => {
   const { user } = useAuth();
@@ -74,8 +75,8 @@ const MyEnrolledClasses = () => {
 
     fetchEnrollments();
   }, [user]);
-
-  if (loading) return <p className="text-center text-lg py-6">Loading enrolled classes...</p>;
+  
+  if (loading) return <Loader></Loader>;
   if (error) return <p className="text-center text-red-500 py-6">Error: {error}</p>;
   if (enrolledClasses.length === 0)
     return <p className="text-center py-6">You have not enrolled in any classes yet.</p>;

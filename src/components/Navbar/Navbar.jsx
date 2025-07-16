@@ -124,7 +124,7 @@ const Navbar = () => {
             {user?.role === "admin" ? adminNavItems : userNavItems}
           </ul>
 
-          {/* Right Side (Profile or Login) */}
+          {/* Right Side - Profile */}
           <div className="flex items-center space-x-4 relative" ref={profileRef}>
             {!user ? (
               <Link
@@ -134,36 +134,46 @@ const Navbar = () => {
                 Sign In
               </Link>
             ) : (
-              <>
+              <div className="relative">
                 <img
                   src={user.photoURL || "/default-avatar.png"}
                   alt={user.displayName || user.email}
-                  className="w-10 h-10 rounded-full border-2 border-blue-600 cursor-pointer"
+                  className="w-10 h-10 rounded-full border-2 border-blue-600 cursor-pointer transition-transform hover:scale-105"
                   onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
                   title={user.displayName || user.email}
                 />
-                {profileDropdownOpen && (
-                  <ul className="absolute right-0 top-14 w-64 bg-white border rounded shadow-md py-4 px-4 space-y-3 text-gray-700 z-50">
-                    <li className="flex items-center space-x-4">
+
+                {/* Dropdown with animation */}
+                <div
+                  className={`absolute right-0 mt-2 w-72 bg-white border rounded shadow-lg z-50 transition-all duration-300 origin-top-right transform ${
+                    profileDropdownOpen
+                      ? "opacity-100 scale-100 translate-y-0"
+                      : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
+                  }`}
+                >
+                  <div className="px-4 py-4 space-y-3 text-gray-700">
+                    <div className="flex items-center space-x-4 border-b pb-3">
                       <img
                         src={user.photoURL || "/default-avatar.png"}
                         alt={user.displayName || "User Avatar"}
-                        className="w-16 h-16 rounded-full border-2 border-blue-600"
+                        className="w-14 h-14 rounded-full border border-blue-600"
                       />
                       <div>
-                        <p className="font-semibold text-lg">{user.displayName || "No Name"}</p>
-                        <p className="text-sm text-gray-500 capitalize">{user.role || "student"}</p>
+                        <p className="font-semibold text-lg">
+                          {user.displayName || "No Name"}
+                        </p>
+                        <p className="text-sm text-gray-500 capitalize">
+                          {user.role || "student"}
+                        </p>
                       </div>
-                    </li>
+                    </div>
 
-                    <li>
+                    <div className="text-sm">
                       <p><strong>Email:</strong> {user.email}</p>
-                    </li>
-                    <li>
                       <p><strong>Phone:</strong> {user.phone || "+880123456789"}</p>
-                    </li>
+                    </div>
 
-                    <li className="border-t pt-3">
+                    <div className="border-t pt-3 space-y-2">
                       <NavLink
                         to={getDashboardPath()}
                         className="block px-4 py-2 hover:bg-gray-100 rounded"
@@ -173,28 +183,25 @@ const Navbar = () => {
                       </NavLink>
                       <NavLink
                         to={`${getDashboardPath()}/profile`}
-                        className="block px-4 py-2 hover:bg-gray-100 rounded mt-1"
+                        className="block px-4 py-2 hover:bg-gray-100 rounded"
                         onClick={() => setProfileDropdownOpen(false)}
                       >
                         Profile
                       </NavLink>
-                    </li>
-
-                    <li>
                       <button
                         onClick={handleLogout}
                         className="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600 rounded"
                       >
                         Logout
                       </button>
-                    </li>
-                  </ul>
-                )}
-              </>
+                    </div>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
 
-          {/* Hamburger for Mobile */}
+          {/* Mobile Hamburger */}
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -228,7 +235,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Items */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-white shadow-md px-4 pb-4 pt-2">
           <ul className="space-y-2 list-none">

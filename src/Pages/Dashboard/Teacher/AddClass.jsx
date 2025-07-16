@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 
+
 const AddClass = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -40,13 +41,13 @@ const AddClass = () => {
       console.error(err);
       alert("Failed to add class");
     }
-  };
+  };      
 
   return (
     <div className="max-w-xl mx-auto p-6 bg-white rounded shadow-md mt-10">
       <h2 className="text-2xl font-semibold mb-6">Add Class</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-
+ 
         <div>
           <label htmlFor="title" className="block mb-1 font-medium">Title</label>
           <input

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Loader from '../../../components/Loader';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -22,9 +23,9 @@ const Users = () => {
 
     fetchUsers();
   }, []);
+  if (loading) return <Loader/>;
 
-  if (loading) return <p className="text-center mt-10 text-gray-500">Loading users...</p>;
-  if (error) return <p className="text-center mt-10 text-red-500">{error}</p>;
+  if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
     <div className="max-w-6xl mx-auto p-4">
@@ -43,7 +44,7 @@ const Users = () => {
               <h3 className="text-xl font-semibold mb-1">{user.name || 'No Name'}</h3>
               <p className="text-gray-600 mb-2">{user.email}</p>
               <span
-                className={`inline-block px-3 py-1 rounded-full text-sm font-medium
+                className={`inline-block px-3  rounded-full text-sm font-medium
                   ${
                     user.role === 'admin'
                       ? 'bg-red-200 text-red-800'
