@@ -1,12 +1,16 @@
-import { createBrowserRouter } from "react-router-dom";
+// src/router/router.jsx
+import React from "react";
+import { createBrowserRouter, Outlet } from "react-router-dom";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
 // Layouts
-import AuthLayOut from "../AuthLayOut/AuthLayOut";
-import MainLayOut from "../layout/MainLayOut";
+import AuthLayout from "../AuthLayOut/AuthLayOut";
+import MainLayout from "../layout/MainLayOut";
 import StudentDashboardLayout from "../layout/StudentDashboardLayout";
 import TeacherDashboardLayout from "../layout/TeacherDashboardLayout";
 import AdminDashboardLayout from "../layout/AdminDashboardLayout";
-import AllClassesLayout from "../layout/AllClassesLayout"; // for /all-classes
+import AllClassesLayout from "../layout/AllClassesLayout";
 
 // Public Pages
 import Home from "../pages/Home";
@@ -28,6 +32,7 @@ import MyClass from "../pages/Dashboard/Teacher/MyClass";
 import AddClass from "../pages/Dashboard/Teacher/AddClass";
 import TeacherClassDetails from "../pages/Dashboard/Teacher/TeacherClassDetails";
 import TeacherProfile from "../pages/Dashboard/Teacher/TeacherProfile";
+import TeacherRequestForm from "../pages/Dashboard/Teacher/TeacherRequestForm";
 
 // Student Pages
 import MyEnrolledClasses from "../pages/Dashboard/Student/MyEnrolledClasses";
@@ -36,34 +41,35 @@ import Orders from "../pages/Dashboard/Student/Orders";
 import StudentProfile from "../pages/Dashboard/Student/StudentProfile";
 
 // Other Pages
-import ClassDetails from "../pages/ClassDetails"; // case-sensitive import
+import ClassDetails from "../pages/ClassDetails";
+import Payment from "../components/Payment";
 
-// Teacher Request Form (correct import path, adjust if your folder is 'pages' lowercase)
-import TeacherRequestForm from "../pages/Dashboard/Teacher/TeacherRequestForm";
+const stripePromise = loadStripe("pk_test_51Rm3ScQZQai0rO82528C1QcnbC7n1PUdkiZP2qotPdfRQRNWKPZSPP36tZ6NEB6eyqi2pbLHxmw7EJZSIC0BIQWS00HnTTXDCt");
 
 export const router = createBrowserRouter([
-  // Public routes
+  // Public Routes
   {
     path: "/",
-    element: <MainLayOut />,
-    children: [{ index: true, element: <Home /> }],
+    element: <MainLayout />,
+    children: [
+      { index: true, element: <Home /> },
+    ],
   },
-
   {
     path: "/auth",
-    element: <AuthLayOut />,
+    element: <AuthLayout />,
     children: [
       { path: "login", element: <Login /> },
       { path: "register", element: <Register /> },
     ],
   },
 
-  // Classes listing & details - partially protected
+  // Classes listing & details (partial private)
   {
     path: "/all-classes",
-    element: <AllClassesLayout />, // renders <Outlet />
+    element: <AllClassesLayout />,
     children: [
-      { index: true, element: <AllClasses /> }, // public class list page
+      { index: true, element: <AllClasses /> }, // public list page
       {
         path: "class/:id",
         element: (
@@ -75,7 +81,7 @@ export const router = createBrowserRouter([
     ],
   },
 
-  // Dashboard routes - fully protected & role based
+  // Dashboard - fully protected, role based
   {
     path: "/dashboard",
     element: (
@@ -84,7 +90,7 @@ export const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
-      // Admin Dashboard
+      // Admin Dashboard routes
       {
         path: "admin",
         element: <AdminDashboardLayout />,
@@ -97,7 +103,7 @@ export const router = createBrowserRouter([
         ],
       },
 
-      // Teacher Dashboard
+      // Teacher Dashboard routes
       {
         path: "teacher",
         element: <TeacherDashboardLayout />,
@@ -107,10 +113,11 @@ export const router = createBrowserRouter([
           { path: "my-class", element: <MyClass /> },
           { path: "my-classes/:id", element: <TeacherClassDetails /> },
           { path: "profile", element: <TeacherProfile /> },
+          { path: "teach", element: <TeacherRequestForm /> },
         ],
       },
 
-      // Student Dashboard
+      // Student Dashboard routes
       {
         path: "student",
         element: <StudentDashboardLayout />,
@@ -121,13 +128,15 @@ export const router = createBrowserRouter([
           { path: "orders", element: <Orders /> },
           { path: "profile", element: <StudentProfile /> },
 
-          // Corrected path here (relative path, no leading slash)
+          // Payment route with Stripe Elements and PrivateRoute
           {
-            path: "teach",
+            path: "payment/:id",
             element: (
-              <PrivateRoute>
-                <TeacherRequestForm />
-              </PrivateRoute>
+              <Elements stripe={stripePromise}>
+                <PrivateRoute>
+                  <Payment />
+                </PrivateRoute>
+              </Elements>
             ),
           },
         ],

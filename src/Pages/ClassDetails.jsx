@@ -47,18 +47,19 @@ const ClassDetails = () => {
       <p className="text-xl font-semibold mb-4">Price: ${classInfo.price}</p>
 
       <button
-        onClick={() => {
-          if (!user) {
-            alert("Please login to proceed with payment");
-            navigate("/auth/login");
-            return;
-          }
-          navigate(`/payment/${classInfo._id}`);
-        }}
-        className="px-5 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-      >
-        Pay
-      </button>
+  onClick={() => {
+    if (!user) {
+      alert("Please login to proceed with payment");
+      navigate("/auth/login");
+      return;
+    }
+    navigate(`/dashboard/student/payment/${classInfo._id}`);
+  }}
+  className="px-5 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+>
+  Pay
+</button>
+
     </div>
   );
 };
