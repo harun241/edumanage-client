@@ -56,17 +56,19 @@ const Navbar = () => {
           All Classes
         </NavLink>
       </li>
+ {user?.role === "student" && (
   <li>
-  <NavLink
-    to="/dashboard/student/teach"
-    className={({ isActive }) =>
-      isActive ? "text-blue-600 font-semibold" : "text-gray-700"
-    }
-    onClick={() => setMobileMenuOpen(false)}
-  >
-    Teach on EduManage
-  </NavLink>
-</li>
+    <NavLink
+      to="/dashboard/student/teach"
+      className={({ isActive }) =>
+        isActive ? "text-blue-600 font-semibold" : "text-gray-700"
+      }
+      onClick={() => setMobileMenuOpen(false)}
+    >
+      Teach on EduManage
+    </NavLink>
+  </li>
+)}
 
       <li>
         <NavLink

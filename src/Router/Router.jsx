@@ -36,13 +36,15 @@ import TeacherRequestForm from "../pages/Dashboard/Teacher/TeacherRequestForm";
 
 // Student Pages
 import MyEnrolledClasses from "../pages/Dashboard/Student/MyEnrolledClasses";
-import EnrolledClassDetails from "../pages/Dashboard/Student/EnrolledClassDetails";
+import EnrolledClassDetails from "../Pages/Dashboard/Student/MyEnrolledClassDetails";
 import Orders from "../pages/Dashboard/Student/Orders";
 import StudentProfile from "../pages/Dashboard/Student/StudentProfile";
 
 // Other Pages
 import ClassDetails from "../pages/ClassDetails";
 import Payment from "../components/Payment";
+import MyEnrolledClassDetails from "../Pages/Dashboard/Student/MyEnrolledClassDetails";
+import MyClasses from "../pages/Dashboard/Teacher/MyClass";
 
 const stripePromise = loadStripe("pk_test_51Rm3ScQZQai0rO82528C1QcnbC7n1PUdkiZP2qotPdfRQRNWKPZSPP36tZ6NEB6eyqi2pbLHxmw7EJZSIC0BIQWS00HnTTXDCt");
 
@@ -110,7 +112,7 @@ export const router = createBrowserRouter([
         children: [
           { index: true, element: <MyClass /> },
           { path: "add-class", element: <AddClass /> },
-          { path: "my-class", element: <MyClass /> },
+          { path: "my-class", element: <MyClasses /> },
           { path: "my-classes/:id", element: <TeacherClassDetails /> },
           { path: "profile", element: <TeacherProfile /> },
           { path: "teach", element: <TeacherRequestForm /> },
@@ -124,7 +126,7 @@ export const router = createBrowserRouter([
         children: [
           { index: true, element: <MyEnrolledClasses /> },
           { path: "my-classes", element: <MyEnrolledClasses /> },
-          { path: "my-classes/:id", element: <EnrolledClassDetails /> },
+          { path: "my-classes/:id", element: <MyEnrolledClassDetails /> },
           { path: "orders", element: <Orders /> },
           { path: "profile", element: <StudentProfile /> },
 
@@ -137,6 +139,15 @@ export const router = createBrowserRouter([
                   <Payment />
                 </PrivateRoute>
               </Elements>
+            ),
+          },
+
+            {
+            path: "teach",
+            element: (
+              <PrivateRoute>
+                <TeacherRequestForm />
+              </PrivateRoute>
             ),
           },
         ],

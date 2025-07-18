@@ -29,13 +29,7 @@ const MyEnrolledClassDetails = () => {
       try {
         setLoading(true);
         setError(null);
-
-        const res = await fetch(`http://localhost:3000/api/assignments?classId=${classId}`, {
-          headers: {
-            'x-user-email': user.email,
-            'x-user-role': user.role || '',
-          },
-        });
+        const res = await fetch(`http://localhost:3000/assignments?classId=${classId}`);
         if (!res.ok) throw new Error('Failed to fetch assignments');
         const data = await res.json();
         setAssignments(data);
@@ -58,18 +52,14 @@ const MyEnrolledClassDetails = () => {
 
   const handleSubmit = async (assignmentId) => {
     const submissionText = submissions[assignmentId]?.trim();
-    if (!submissionText) return Swal.fire('Warning', 'Submission cannot be empty', 'warning');
+    if (!submissionText) return alert('Submission cannot be empty');
 
     try {
       setSubmitStatus((prev) => ({ ...prev, [assignmentId]: 'loading' }));
 
-      const res = await fetch(`http://localhost:3000/api/submissions`, {
+      const res = await fetch(`http://localhost:3000/submissions`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-user-email': user.email,
-          'x-user-role': user.role || '',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           assignmentId,
           classId,
@@ -93,25 +83,19 @@ const MyEnrolledClassDetails = () => {
   };
 
   const handleSendTER = async () => {
-    if (!feedbackText.trim() || rating === 0) {
-      return Swal.fire('Warning', 'Please provide feedback and a rating.', 'warning');
+    if (!feedbackText || rating === 0) {
+      return Swal.fire('Error', 'Please provide feedback and a rating.', 'warning');
     }
 
     try {
-      const res = await fetch('http://localhost:3000/api/feedbacks', {
+      const res = await fetch('http://localhost:3000/feedbacks', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-user-email': user.email,
-          'x-user-role': user.role || '',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           classId,
           email: user.email,
           feedback: feedbackText,
           rating,
-          userName: user.displayName || user.name || 'Anonymous',
-          userPhoto: user.photoURL || '',
         }),
       });
 
@@ -205,15 +189,18 @@ const MyEnrolledClassDetails = () => {
               onChange={(e) => setFeedbackText(e.target.value)}
               rows={4}
             />
-            <div className="mb-4 text-center">
+            <div className="mb-2 text-center">
               <p className="mb-2 font-semibold">Your Rating:</p>
               <Rating
-                emptySymbol="☆"
-                fullSymbol="★"
+                emptySymbol={<span className="text-3xl text-gray-300 cursor-pointer">☆</span>}
+                fullSymbol={<span className="text-3xl text-yellow-400 cursor-pointer">★</span>}
                 initialRating={rating}
                 onChange={(rate) => setRating(rate)}
-                className="text-yellow-500 text-2xl"
+                fractions={1}
               />
+              <p className="mt-2 text-sm text-gray-600">
+                {rating > 0 ? `You rated ${rating} star${rating > 1 ? 's' : ''}` : 'Please select a rating'}
+              </p>
             </div>
             <div className="flex justify-between">
               <button

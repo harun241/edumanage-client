@@ -1,0 +1,37 @@
+[
+  {
+    "classId": "68774dbeef46e290361e0a5e",
+    "title": "Microprocessor Assignment",
+    "description": "Write an essay on 8086 Microprocessor architecture.",
+    "deadline": "2025-08-01T23:59:59.000Z",
+    "submissions": []
+  },
+  {
+    "classId": "68774e5eef46e290361e0a5f",
+    "title": "Math Assignment 1",
+    "description": "Solve problems from engineering math 4 chapter.",
+    "deadline": "2025-08-10T23:59:59.000Z",
+    "submissions": []
+  },
+  {
+    "classId": "68774e65ef46e290361e0a60",
+    "title": "Math Assignment 2",
+    "description": "Prepare notes on engineering math 4.",
+    "deadline": "2025-08-12T23:59:59.000Z",
+    "submissions": []
+  },
+  {
+    "classId": "68774fd0aff53d121f2cb4ff",
+    "title": "Math Assignment 3",
+    "description": "Review engineering math 4 concepts.",
+    "deadline": "2025-08-15T23:59:59.000Z",
+    "submissions": []
+  },
+  {
+    "classId": "68775128aff53d121f2cb500",
+    "title": "Electromagnetic Field Assignment",
+    "description": "Explain Newton’s law application in electromagnetic fields.",
+    "deadline": "2025-08-20T23:59:59.000Z",
+    "submissions": []
+  }
+]
