@@ -4,6 +4,7 @@ import Banner from '../components/Banner';
 import BeInstructor from '../components/BeInstructor';
 import WebStats from '../components/WebStats';
 import Partners from '../components/Partners';
+import Feedbacks from '../components/Feedbacks';
 
 const Home = () => {
     return (
@@ -13,6 +14,7 @@ const Home = () => {
             <BeInstructor></BeInstructor>
             <WebStats></WebStats>
             <Partners></Partners>
+            <Feedbacks></Feedbacks>
            
             
 
