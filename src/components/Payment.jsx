@@ -1,7 +1,6 @@
-// src/components/Payment.jsx
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import useAuth from '../hooks/useAuth';
 
@@ -12,111 +11,105 @@ const Payment = () => {
   const stripe = useStripe();
   const elements = useElements();
   const { id } = useParams(); // class ID
+  const navigate = useNavigate();
 
   const [classInfo, setClassInfo] = useState(null);
   const [clientSecret, setClientSecret] = useState('');
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // Load class info and create payment intent
   useEffect(() => {
     if (!id || !user?.email) return;
 
-    // Get class info first
-    axios.get(`${API_BASE}/classes/${id}`)
-      .then(res => {
-        const data = res.data;
-        setClassInfo(data);
+    const loadPaymentIntent = async () => {
+      try {
+        const classRes = await axios.get(`${API_BASE}/classes/${id}`);
+        setClassInfo(classRes.data);
 
-        // Then create payment intent by sending classId and user headers
-        return axios.post(`${API_BASE}/create-payment-intent`,
+        const intentRes = await axios.post(`${API_BASE}/create-payment-intent`,
           { classId: id },
           {
             headers: {
               'x-user-email': user.email,
               'x-user-role': user.role || 'student',
-              'Content-Type': 'application/json',
-            },
-          }
-        );
-      })
-      .then(res => {
-        setClientSecret(res.data.clientSecret);
-      })
-      .catch(err => {
+            }
+          });
+        setClientSecret(intentRes.data.clientSecret);
+      } catch (err) {
         console.error('Failed to load payment info:', err);
-        setError('Failed to load payment info');
-      });
-  }, [id, user?.email, user?.role]);
+        setError('❌ Failed to load payment info.');
+      }
+    };
+
+    loadPaymentIntent();
+  }, [id, user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
+    setLoading(true);
 
     if (!stripe || !elements) {
-      setError('Stripe has not loaded yet.');
+      setError('Stripe not loaded.');
+      setLoading(false);
       return;
     }
 
     const card = elements.getElement(CardElement);
     if (!card) {
-      setError('Card element not found');
+      setError('Card element not found.');
+      setLoading(false);
       return;
     }
 
-    // Create payment method
-    const { error: paymentMethodError, paymentMethod } = await stripe.createPaymentMethod({
-      type: 'card',
-      card,
-    });
+    try {
+      // 1. Create payment method
+      const { error: methodError, paymentMethod } = await stripe.createPaymentMethod({
+        type: 'card',
+        card,
+      });
+      if (methodError) throw new Error(methodError.message);
 
-    if (paymentMethodError) {
-      setError(paymentMethodError.message);
-      return;
-    }
+      // 2. Confirm payment
+      const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: paymentMethod.id,
+      });
+      if (confirmError) throw new Error(confirmError.message);
 
-    // Confirm card payment
-    const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: paymentMethod.id,
-    });
-
-    if (confirmError) {
-      setError(confirmError.message);
-      return;
-    }
-
-    if (paymentIntent.status === 'succeeded') {
-      setSuccess('✅ Payment successful!');
-
-      try {
-        // Save payment info to backend
-        await axios.post(`${API_BASE}/api/payments`, {
-          classId: classInfo._id,
-          email: user.email,
-          amount: classInfo.price,
-          paymentId: paymentIntent.id,
-        }, {
-          headers: {
-            'x-user-email': user.email,
-            'x-user-role': user.role || 'student',
-            'Content-Type': 'application/json',
-          },
-        });
-
-        // Save enrollment info to backend
-        await axios.post(`${API_BASE}/enroll/${id}`, {}, {
-          headers: {
-            'x-user-email': user.email,
-            'x-user-role': user.role || 'student',
-            'Content-Type': 'application/json',
-          },
-        });
-
-      } catch (saveError) {
-        console.error('❌ Error saving to database:', saveError);
-        setError('Payment succeeded but failed to save enrollment/payment info.');
+      // 3. Check success
+      if (paymentIntent.status !== 'succeeded') {
+        throw new Error('Payment was not successful');
       }
+
+      // 4. Save to backend
+      const res = await axios.post(`${API_BASE}/payment-success`, {
+        classId: classInfo._id,
+        email: user.email,
+        amount: classInfo.price,
+        paymentId: paymentIntent.id,
+        classTitle: classInfo.title,
+      }, {
+        headers: {
+          'x-user-email': user.email,
+          'x-user-role': user.role || 'student',
+        }
+      });
+
+      if (res.data.success) {
+        setSuccess('✅ Payment & enrollment successful!');
+        setTimeout(() => navigate('/dashboard/student/my-classes'), 2000);
+      } else {
+        throw new Error('Payment succeeded but saving enrollment failed.');
+      }
+
+    } catch (err) {
+      console.error('Error:', err);
+      setError(err.message || 'Something went wrong.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -130,10 +123,10 @@ const Payment = () => {
         <CardElement className="border p-2 rounded mb-4" />
         <button
           type="submit"
-          disabled={!stripe || !clientSecret}
+          disabled={!stripe || !clientSecret || loading}
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
         >
-          Pay ${classInfo?.price || '0'}
+          {loading ? 'Processing...' : `Pay $${classInfo?.price || '0'}`}
         </button>
       </form>
 

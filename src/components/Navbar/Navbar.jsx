@@ -32,84 +32,79 @@ const Navbar = () => {
     return "/dashboard";
   };
 
-  const userNavItems = (
-    <>
-      <li>
+  const userNavItems = [
+    <li key="home">
+      <NavLink
+        to="/"
+        className={({ isActive }) =>
+          isActive ? "text-blue-600 font-semibold" : "text-gray-700"
+        }
+        onClick={() => setMobileMenuOpen(false)}
+      >
+        Home
+      </NavLink>
+    </li>,
+    <li key="classes">
+      <NavLink
+        to="/all-classes"
+        className={({ isActive }) =>
+          isActive ? "text-blue-600 font-semibold" : "text-gray-700"
+        }
+        onClick={() => setMobileMenuOpen(false)}
+      >
+        All Classes
+      </NavLink>
+    </li>,
+    user?.role === "student" && (
+      <li key="teach">
         <NavLink
-          to="/"
+          to="/dashboard/student/teach"
           className={({ isActive }) =>
             isActive ? "text-blue-600 font-semibold" : "text-gray-700"
           }
           onClick={() => setMobileMenuOpen(false)}
         >
-          Home
+          Teach on EduManage
         </NavLink>
       </li>
-      <li>
-        <NavLink
-          to="/all-classes"
-          className={({ isActive }) =>
-            isActive ? "text-blue-600 font-semibold" : "text-gray-700"
-          }
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          All Classes
-        </NavLink>
-      </li>
- {user?.role === "student" && (
-  <li>
-    <NavLink
-      to="/dashboard/student/teach"
-      className={({ isActive }) =>
-        isActive ? "text-blue-600 font-semibold" : "text-gray-700"
-      }
-      onClick={() => setMobileMenuOpen(false)}
-    >
-      Teach on EduManage
-    </NavLink>
-  </li>
-)}
+    ),
+    <li key="dashboard">
+      <NavLink
+        to={getDashboardPath()}
+        className={({ isActive }) =>
+          isActive ? "text-blue-600 font-semibold" : "text-gray-700"
+        }
+        onClick={() => setMobileMenuOpen(false)}
+      >
+        Dashboard
+      </NavLink>
+    </li>,
+  ].filter(Boolean);
 
-      <li>
-        <NavLink
-          to={getDashboardPath()}
-          className={({ isActive }) =>
-            isActive ? "text-blue-600 font-semibold" : "text-gray-700"
-          }
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          Dashboard
-        </NavLink>
-      </li>
-    </>
-  );
-
-  const adminNavItems = (
-    <>
-      <li>
-        <NavLink
-          to="/dashboard/admin/all-classes"
-          className={({ isActive }) =>
-            isActive ? "text-blue-600 font-semibold" : "text-gray-700"
-          }
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          All Classes (Admin)
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/dashboard/admin"
-          className={({ isActive }) =>
-            isActive ? "text-blue-600 font-semibold" : "text-gray-700"
-          }
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          Dashboard
-        </NavLink>
-      </li>
-    </>
-  );
+  const adminNavItems = [
+    <li key="admin-classes">
+      <NavLink
+        to="/dashboard/admin/all-classes"
+        className={({ isActive }) =>
+          isActive ? "text-blue-600 font-semibold" : "text-gray-700"
+        }
+        onClick={() => setMobileMenuOpen(false)}
+      >
+        All Classes (Admin)
+      </NavLink>
+    </li>,
+    <li key="admin-dashboard">
+      <NavLink
+        to="/dashboard/admin"
+        className={({ isActive }) =>
+          isActive ? "text-blue-600 font-semibold" : "text-gray-700"
+        }
+        onClick={() => setMobileMenuOpen(false)}
+      >
+        Dashboard
+      </NavLink>
+    </li>,
+  ];
 
   return (
     <nav className="w-full bg-white shadow-sm fixed top-0 left-0 z-50">
@@ -142,17 +137,36 @@ const Navbar = () => {
                   src={user.photoURL || "/default-avatar.png"}
                   alt={user.displayName || user.email}
                   className="w-10 h-10 rounded-full border-2 border-blue-600 cursor-pointer transition-transform hover:scale-105"
-                  onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                  onClick={() => {
+                    setProfileDropdownOpen((prev) => {
+                      if (!prev) setMobileMenuOpen(false);
+                      return !prev;
+                    });
+                  }}
                   title={user.displayName || user.email}
                 />
 
-                {/* Dropdown with animation */}
+                {/* Profile Dropdown */}
                 <div
-                  className={`absolute right-0 mt-2 w-72 bg-white border rounded shadow-lg z-50 transition-all duration-300 origin-top-right transform ${
-                    profileDropdownOpen
-                      ? "opacity-100 scale-100 translate-y-0"
-                      : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
-                  }`}
+                  className={`absolute bg-white border rounded shadow-lg z-40 transition-all duration-300 origin-top-right transform
+                    ${
+                      profileDropdownOpen
+                        ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
+                        : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
+                    }
+                    w-72
+                    right-0
+                    mt-2
+
+                    md:right-0 md:mt-2 md:w-72
+
+                    /* Mobile specific styles */
+                    left-1/2 -translate-x-1/2
+                    max-w-[90vw]
+
+                    md:left-auto md:translate-x-0
+                  `}
+                  style={{ maxWidth: "360px" }}
                 >
                   <div className="px-4 py-4 space-y-3 text-gray-700">
                     <div className="flex items-center space-x-4 border-b pb-3">
@@ -172,8 +186,12 @@ const Navbar = () => {
                     </div>
 
                     <div className="text-sm">
-                      <p><strong>Email:</strong> {user.email}</p>
-                      <p><strong>Phone:</strong> {user.phone || "+880123456789"}</p>
+                      <p>
+                        <strong>Email:</strong> {user.email}
+                      </p>
+                      <p>
+                        <strong>Phone:</strong> {user.phone || "+880123456789"}
+                      </p>
                     </div>
 
                     <div className="border-t pt-3 space-y-2">
@@ -207,8 +225,14 @@ const Navbar = () => {
           {/* Mobile Hamburger */}
           <div className="md:hidden flex items-center">
             <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              onClick={() => {
+                setMobileMenuOpen((prev) => {
+                  if (!prev) setProfileDropdownOpen(false);
+                  return !prev;
+                });
+              }}
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-blue-600 focus:outline-none"
+              aria-label="Toggle menu"
             >
               <svg
                 className="h-6 w-6"
@@ -238,14 +262,18 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu Items */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-white shadow-md px-4 pb-4 pt-2">
-          <ul className="space-y-2 list-none">
-            {user?.role === "admin" ? adminNavItems : userNavItems}
-          </ul>
-        </div>
-      )}
+      {/* Mobile Menu with smooth transition */}
+      <div
+        className={`md:hidden bg-white shadow-md px-4 pb-4 pt-2 relative z-60 transition-all duration-300 origin-top transform ${
+          mobileMenuOpen
+            ? "opacity-100 scale-100 max-h-screen ease-out"
+            : "opacity-0 scale-95 max-h-0 ease-in pointer-events-none overflow-hidden"
+        }`}
+      >
+        <ul className="space-y-2 list-none">
+          {user?.role === "admin" ? adminNavItems : userNavItems}
+        </ul>
+      </div>
     </nav>
   );
 };
