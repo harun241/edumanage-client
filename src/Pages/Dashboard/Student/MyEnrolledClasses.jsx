@@ -1,239 +1,100 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import useAuth from '../../../hooks/useAuth';
 import Loader from '../../../components/Loader';
-import Rating from 'react-rating';
-import Swal from 'sweetalert2';
+import { Link } from 'react-router-dom';
 
-const MyEnrolledClassDetails = () => {
-  const { id: classId } = useParams();
+const MyEnrolledClasses = () => {
   const { user } = useAuth();
-
-  const [assignments, setAssignments] = useState([]);
+  const [enrolledClasses, setEnrolledClasses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [submissions, setSubmissions] = useState({});
-  const [submitStatus, setSubmitStatus] = useState({});
-  const [showTERModal, setShowTERModal] = useState(false);
-  const [feedbackText, setFeedbackText] = useState('');
-  const [rating, setRating] = useState(0);
 
   useEffect(() => {
-    if (!classId || !user?.email) {
-      setError('Invalid class ID or user not logged in');
-      setLoading(false);
-      return;
-    }
+    if (!user) return;
 
-    const fetchAssignments = async () => {
+    const fetchEnrolledClasses = async () => {
       try {
         setLoading(true);
         setError(null);
 
-        const res = await fetch(`http://localhost:3000/api/assignments?classId=${classId}`, {
+        // ইউজারের এনরোলমেন্টস নিয়ে আসা
+        const enrollRes = await fetch(`http://localhost:3000/enrollments`, {
           headers: {
             'x-user-email': user.email,
             'x-user-role': user.role || '',
           },
         });
-        if (!res.ok) throw new Error('Failed to fetch assignments');
-        const data = await res.json();
-        setAssignments(data);
+
+        if (!enrollRes.ok) throw new Error('Failed to fetch enrollments');
+
+        const enrollments = await enrollRes.json();
+
+        if (enrollments.length === 0) {
+          setEnrolledClasses([]);
+          return;
+        }
+
+        // ইউনিক ক্লাস আইডি নেওয়া (ডুপ্লিকেট এড়াতে)
+        const uniqueClassIds = [...new Set(enrollments.map(enroll => enroll.classId))];
+
+        // একসাথে সব ক্লাস ডিটেইল নিয়ে আসা
+        const classPromises = uniqueClassIds.map(id =>
+          fetch(`http://localhost:3000/classes/${id}`).then(res => {
+            if (!res.ok) throw new Error('Failed to fetch class details');
+            return res.json();
+          })
+        );
+
+        const classes = await Promise.all(classPromises);
+
+        setEnrolledClasses(classes);
       } catch (err) {
-        setError(err.message || 'Error loading assignments');
+        setError(err.message || 'Something went wrong');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchAssignments();
-  }, [classId, user]);
+    fetchEnrolledClasses();
+  }, [user]);
 
-  const handleChange = (assignmentId, value) => {
-    setSubmissions((prev) => ({
-      ...prev,
-      [assignmentId]: value,
-    }));
-  };
+  if (!user || loading) return <Loader />;
 
-  const handleSubmit = async (assignmentId) => {
-    const submissionText = submissions[assignmentId]?.trim();
-    if (!submissionText) return Swal.fire('Warning', 'Submission cannot be empty', 'warning');
-
-    try {
-      setSubmitStatus((prev) => ({ ...prev, [assignmentId]: 'loading' }));
-
-      const res = await fetch(`http://localhost:3000/api/submissions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-user-email': user.email,
-          'x-user-role': user.role || '',
-        },
-        body: JSON.stringify({
-          assignmentId,
-          classId,
-          userEmail: user.email,
-          submission: submissionText,
-        }),
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || 'Failed to submit assignment');
-      }
-
-      setSubmitStatus((prev) => ({ ...prev, [assignmentId]: 'success' }));
-      setSubmissions((prev) => ({ ...prev, [assignmentId]: '' }));
-      Swal.fire('Success', 'Submission successful!', 'success');
-    } catch (err) {
-      setSubmitStatus((prev) => ({ ...prev, [assignmentId]: 'error' }));
-      Swal.fire('Error', err.message, 'error');
-    }
-  };
-
-  const handleSendTER = async () => {
-    if (!feedbackText.trim() || rating === 0) {
-      return Swal.fire('Warning', 'Please provide feedback and a rating.', 'warning');
-    }
-
-    try {
-      const res = await fetch('http://localhost:3000/api/feedbacks', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-user-email': user.email,
-          'x-user-role': user.role || '',
-        },
-        body: JSON.stringify({
-          classId,
-          email: user.email,
-          feedback: feedbackText,
-          rating,
-          userName: user.displayName || user.name || 'Anonymous',
-          userPhoto: user.photoURL || '',
-        }),
-      });
-
-      if (!res.ok) throw new Error('Failed to send feedback');
-
-      setShowTERModal(false);
-      setFeedbackText('');
-      setRating(0);
-      Swal.fire('Success', 'Feedback submitted!', 'success');
-    } catch (err) {
-      Swal.fire('Error', err.message, 'error');
-    }
-  };
-
-  if (loading) return <Loader />;
   if (error) return <p className="text-center text-red-500 py-6">{error}</p>;
-  if (assignments.length === 0) return <p className="text-center py-6">No assignments yet.</p>;
+
+  if (enrolledClasses.length === 0)
+    return <p className="text-center text-gray-500 py-6">You have not enrolled in any class yet.</p>;
 
   return (
-    <div className="max-w-6xl mx-auto p-6 bg-white rounded shadow mt-10">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-bold text-blue-700">Class Assignments</h2>
-        <button
-          onClick={() => setShowTERModal(true)}
-          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
-        >
-          Teaching Evaluation Report
-        </button>
-      </div>
-
-      {/* Assignment Table */}
-      <table className="w-full table-auto border-collapse border border-gray-300">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="border border-gray-300 p-2 text-left">Title</th>
-            <th className="border border-gray-300 p-2 text-left">Description</th>
-            <th className="border border-gray-300 p-2 text-left">Deadline</th>
-            <th className="border border-gray-300 p-2 text-left">Submission</th>
-            <th className="border border-gray-300 p-2 text-center">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {assignments.map(({ _id, title, description, deadline }) => {
-            const status = submitStatus[_id];
-
-            return (
-              <tr key={_id} className="hover:bg-gray-50">
-                <td className="border p-2">{title}</td>
-                <td className="border p-2">{description}</td>
-                <td className="border p-2">{new Date(deadline).toLocaleDateString()}</td>
-                <td className="border p-2">
-                  <textarea
-                    rows={3}
-                    className="w-full border border-gray-300 rounded p-2"
-                    value={submissions[_id] || ''}
-                    onChange={(e) => handleChange(_id, e.target.value)}
-                    disabled={status === 'success'}
-                  />
-                </td>
-                <td className="border p-2 text-center">
-                  <button
-                    onClick={() => handleSubmit(_id)}
-                    disabled={status === 'loading' || status === 'success'}
-                    className={`px-4 py-2 rounded text-white ${
-                      status === 'success'
-                        ? 'bg-green-600 cursor-default'
-                        : 'bg-blue-600 hover:bg-blue-700'
-                    }`}
-                  >
-                    {status === 'loading' ? 'Submitting...' : status === 'success' ? 'Submitted' : 'Submit'}
-                  </button>
-                  {status === 'error' && (
-                    <p className="text-red-600 mt-1 text-sm">Failed to submit</p>
-                  )}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-
-      {/* Feedback Modal */}
-      {showTERModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-lg relative">
-            <h3 className="text-xl font-bold mb-4 text-center">Teaching Evaluation Report</h3>
-            <textarea
-              className="w-full border p-2 rounded mb-4"
-              placeholder="Write your feedback..."
-              value={feedbackText}
-              onChange={(e) => setFeedbackText(e.target.value)}
-              rows={4}
-            />
-            <div className="mb-4 text-center">
-              <p className="mb-2 font-semibold">Your Rating:</p>
-              <Rating
-                emptySymbol="☆"
-                fullSymbol="★"
-                initialRating={rating}
-                onChange={(rate) => setRating(rate)}
-                className="text-yellow-500 text-2xl"
+    <div className="p-6 max-w-5xl mx-auto">
+      <h2 className="text-3xl font-bold mb-6 text-center">My Enrolled Classes</h2>
+      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {enrolledClasses.map(cls => (
+          <li
+            key={cls._id}
+            className="border rounded-lg p-4 shadow hover:shadow-lg transition duration-200 flex flex-col"
+          >
+            {cls.image && (
+              <img
+                src={cls.image}
+                alt={cls.title}
+                className="w-full h-40 object-cover rounded-md mb-4"
               />
-            </div>
-            <div className="flex justify-between">
-              <button
-                onClick={handleSendTER}
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-              >
-                Send
-              </button>
-              <button
-                onClick={() => setShowTERModal(false)}
-                className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+            )}
+            <h3 className="text-xl font-semibold">{cls.title}</h3>
+            <p className="text-gray-600 mt-1 flex-grow">{cls.description}</p>
+            <p className="mt-2 font-semibold">Price: ${cls.price}</p>
+            <Link
+              to={`/dashboard/student/my-classes/${cls._id}`}
+              className="inline-block mt-4 bg-blue-600 text-white py-2 rounded hover:bg-blue-700 text-center"
+            >
+              Continue
+            </Link>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
 
-export default MyEnrolledClassDetails;
+export default MyEnrolledClasses;
