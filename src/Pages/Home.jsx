@@ -5,6 +5,7 @@ import BeInstructor from '../components/BeInstructor';
 import WebStats from '../components/WebStats';
 import Partners from '../components/Partners';
 import Feedbacks from '../components/Feedbacks';
+import PopularClasses from '../components/PopularClasses';
 
 const Home = () => {
     return (
@@ -13,8 +14,9 @@ const Home = () => {
             <Banner></Banner>
             <BeInstructor></BeInstructor>
             <WebStats></WebStats>
+            <PopularClasses></PopularClasses>
             <Partners></Partners>
-            <Feedbacks></Feedbacks>
+           <Feedbacks></Feedbacks>
            
             
 
