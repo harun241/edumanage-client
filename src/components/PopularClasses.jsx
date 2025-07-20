@@ -33,7 +33,7 @@ const PopularClasses = () => {
 
   return (
     <section className="my-12 px-4 md:px-12">
-      <h2 className="text-3xl font-bold text-center mb-8 text-green-700">
+      <h2 className="text-3xl font-bold text-center mb-8 text-black dark:text-white">
         🌟 Popular Classes
       </h2>
       {popularClasses.length > 0 ? (
