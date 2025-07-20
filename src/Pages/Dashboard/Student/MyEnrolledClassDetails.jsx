@@ -112,12 +112,16 @@ const MyEnrolledClassDetails = () => {
 
   if (loading) return <Loader />;
   if (error) return <p className="text-center text-red-500 py-6">{error}</p>;
-  if (assignments.length === 0) return <p className="text-center py-6">No assignments yet.</p>;
+  if (assignments.length === 0) return <p className="text-center py-6 dark:bg-gray-700">No assignments yet.</p>;
+
+  // Dummy teacher info (replace with real data if available)
+  const teacherName = 'harun';
+  const teacherEmail = 'harun01.dev@gmail.com';
 
   return (
-    <div className="max-w-6xl mx-auto p-6 bg-white rounded shadow mt-10">
+    <div className="max-w-6xl mx-auto p-6 bg-white dark:bg-gray-900 rounded shadow mt-10 text-gray-900 dark:text-gray-100">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-bold text-blue-700">Class Assignments</h2>
+        <h2 className="text-3xl font-bold text-blue-700 dark:text-blue-400">Class Assignments</h2>
         <button
           onClick={() => setShowTERModal(true)}
           className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
@@ -126,15 +130,29 @@ const MyEnrolledClassDetails = () => {
         </button>
       </div>
 
+      {/* Teacher & Email - only visible in dark mode */}
+      <div className="mb-4 space-y-1">
+        <p className="hidden dark:block">
+          <strong>Teacher:</strong> {teacherName}
+        </p>
+        <p className="hidden dark:block">
+          <strong>Email:</strong> {teacherEmail}
+        </p>
+        {/* Pay Button - only dark mode */}
+        <button className="hidden dark:inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded mt-2">
+          Pay
+        </button>
+      </div>
+
       {/* Assignment Table */}
-      <table className="w-full table-auto border-collapse border border-gray-300">
+      <table className="w-full table-auto border-collapse border border-gray-300 dark:border-gray-700">
         <thead>
-          <tr className="bg-gray-100">
-            <th className="border border-gray-300 p-2 text-left">Title</th>
-            <th className="border border-gray-300 p-2 text-left">Description</th>
-            <th className="border border-gray-300 p-2 text-left">Deadline</th>
-            <th className="border border-gray-300 p-2 text-left">Submission</th>
-            <th className="border border-gray-300 p-2 text-center">Action</th>
+          <tr className="bg-gray-100 dark:bg-gray-800">
+            <th className="border border-gray-300 dark:border-gray-700 p-2 text-left">Title</th>
+            <th className="border border-gray-300 dark:border-gray-700 p-2 text-left">Description</th>
+            <th className="border border-gray-300 dark:border-gray-700 p-2 text-left">Deadline</th>
+            <th className="border border-gray-300 dark:border-gray-700 p-2 text-left">Submission</th>
+            <th className="border border-gray-300 dark:border-gray-700 p-2 text-center">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -142,20 +160,20 @@ const MyEnrolledClassDetails = () => {
             const status = submitStatus[_id];
 
             return (
-              <tr key={_id} className="hover:bg-gray-50">
-                <td className="border p-2">{title}</td>
-                <td className="border p-2">{description}</td>
-                <td className="border p-2">{new Date(deadline).toLocaleDateString()}</td>
-                <td className="border p-2">
+              <tr key={_id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                <td className="border p-2 border-gray-300 dark:border-gray-700">{title}</td>
+                <td className="border p-2 border-gray-300 dark:border-gray-700">{description}</td>
+                <td className="border p-2 border-gray-300 dark:border-gray-700">{new Date(deadline).toLocaleDateString()}</td>
+                <td className="border p-2 border-gray-300 dark:border-gray-700">
                   <textarea
                     rows={3}
-                    className="w-full border border-gray-300 rounded p-2"
+                    className="w-full border border-gray-300 dark:border-gray-700 rounded p-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                     value={submissions[_id] || ''}
                     onChange={(e) => handleChange(_id, e.target.value)}
                     disabled={status === 'success'}
                   />
                 </td>
-                <td className="border p-2 text-center">
+                <td className="border p-2 border-gray-300 dark:border-gray-700 text-center">
                   <button
                     onClick={() => handleSubmit(_id)}
                     disabled={status === 'loading' || status === 'success'}
@@ -180,10 +198,10 @@ const MyEnrolledClassDetails = () => {
       {/* Feedback Modal */}
       {showTERModal && (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-lg relative">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md shadow-lg relative text-gray-900 dark:text-gray-100">
             <h3 className="text-xl font-bold mb-4 text-center">Teaching Evaluation Report</h3>
             <textarea
-              className="w-full border p-2 rounded mb-4"
+              className="w-full border p-2 rounded mb-4 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               placeholder="Write your feedback..."
               value={feedbackText}
               onChange={(e) => setFeedbackText(e.target.value)}
@@ -198,7 +216,7 @@ const MyEnrolledClassDetails = () => {
                 onChange={(rate) => setRating(rate)}
                 fractions={1}
               />
-              <p className="mt-2 text-sm text-gray-600">
+              <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
                 {rating > 0 ? `You rated ${rating} star${rating > 1 ? 's' : ''}` : 'Please select a rating'}
               </p>
             </div>

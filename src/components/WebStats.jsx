@@ -25,17 +25,29 @@ const WebStats = () => {
     <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-8 px-6 py-12">
       {/* Left side: Stats cards */}
       <div className="space-y-6">
-        <div className="bg-blue-100 p-6 rounded-lg shadow text-center">
-          <h3 className="text-xl font-semibold">👥 Total Users</h3>
-          <p className="text-3xl font-bold">{stats.totalUsers}</p>
+        <div className="bg-blue-100 dark:bg-blue-900 p-6 rounded-lg shadow text-center">
+          <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
+            👥 Total Users
+          </h3>
+          <p className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+            {stats.totalUsers}
+          </p>
         </div>
-        <div className="bg-green-100 p-6 rounded-lg shadow text-center">
-          <h3 className="text-xl font-semibold">📚 Total Classes</h3>
-          <p className="text-3xl font-bold">{stats.totalClasses}</p>
+        <div className="bg-green-100 dark:bg-green-900 p-6 rounded-lg shadow text-center">
+          <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
+            📚 Total Classes
+          </h3>
+          <p className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+            {stats.totalClasses}
+          </p>
         </div>
-        <div className="bg-yellow-100 p-6 rounded-lg shadow text-center">
-          <h3 className="text-xl font-semibold">✅ Total Enrollments</h3>
-          <p className="text-3xl font-bold">{stats.totalEnrollments}</p>
+        <div className="bg-yellow-100 dark:bg-yellow-900 p-6 rounded-lg shadow text-center">
+          <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
+            ✅ Total Enrollments
+          </h3>
+          <p className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+            {stats.totalEnrollments}
+          </p>
         </div>
       </div>
 

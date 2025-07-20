@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import useAuth from '../../../hooks/useAuth';
 
-
 const categories = [
   "Web Development",
   "Digital Marketing",
@@ -41,7 +40,6 @@ const TeacherRequestForm = () => {
       return;
     }
 
-    // Simple validation
     if (
       !formData.name.trim() ||
       !formData.experience ||
@@ -73,7 +71,6 @@ const TeacherRequestForm = () => {
       );
 
       setMessage('✅ Your request has been sent. Please wait for admin approval.');
-      // Optionally clear form or disable
     } catch (error) {
       console.error('Request Error:', error);
       const errMsg = error?.response?.data?.error || '❌ Failed to send request. Try again later.';
@@ -84,14 +81,16 @@ const TeacherRequestForm = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-12 p-6 border rounded-xl shadow-md bg-white">
-      <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
+    <div className="max-w-md mx-auto mt-12 p-6 border rounded-xl shadow-md bg-white dark:bg-gray-900 transition-colors duration-300">
+      <h2 className="text-2xl font-bold text-center mb-6 text-gray-800 dark:text-gray-100 transition-colors duration-300">
         Request to Become a Teacher
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block font-medium mb-1">Name</label>
+          <label className="block font-medium mb-1 text-gray-700 dark:text-gray-300 transition-colors duration-300">
+            Name
+          </label>
           <input
             type="text"
             name="name"
@@ -99,18 +98,20 @@ const TeacherRequestForm = () => {
             onChange={handleChange}
             placeholder="Your full name"
             required
-            className="w-full border rounded px-3 py-2"
+            className="w-full border rounded px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-700 transition-colors duration-300"
           />
         </div>
 
         <div>
-          <label className="block font-medium mb-1">Experience Level</label>
+          <label className="block font-medium mb-1 text-gray-700 dark:text-gray-300 transition-colors duration-300">
+            Experience Level
+          </label>
           <select
             name="experience"
             value={formData.experience}
             onChange={handleChange}
             required
-            className="w-full border rounded px-3 py-2"
+            className="w-full border rounded px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-700 transition-colors duration-300"
           >
             <option value="">Select experience</option>
             {experiences.map((exp) => (
@@ -122,7 +123,9 @@ const TeacherRequestForm = () => {
         </div>
 
         <div>
-          <label className="block font-medium mb-1">Title</label>
+          <label className="block font-medium mb-1 text-gray-700 dark:text-gray-300 transition-colors duration-300">
+            Title
+          </label>
           <input
             type="text"
             name="title"
@@ -130,18 +133,20 @@ const TeacherRequestForm = () => {
             onChange={handleChange}
             placeholder="e.g. Frontend Developer"
             required
-            className="w-full border rounded px-3 py-2"
+            className="w-full border rounded px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-700 transition-colors duration-300"
           />
         </div>
 
         <div>
-          <label className="block font-medium mb-1">Category</label>
+          <label className="block font-medium mb-1 text-gray-700 dark:text-gray-300 transition-colors duration-300">
+            Category
+          </label>
           <select
             name="category"
             value={formData.category}
             onChange={handleChange}
             required
-            className="w-full border rounded px-3 py-2"
+            className="w-full border rounded px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-700 transition-colors duration-300"
           >
             <option value="">Select category</option>
             {categories.map((cat) => (
@@ -164,11 +169,11 @@ const TeacherRequestForm = () => {
           <p
             className={`mt-4 text-center text-sm ${
               message.startsWith('✅')
-                ? 'text-green-600'
+                ? 'text-green-600 dark:text-green-400'
                 : message.startsWith('⚠️')
-                ? 'text-yellow-600'
-                : 'text-red-600'
-            }`}
+                ? 'text-yellow-600 dark:text-yellow-400'
+                : 'text-red-600 dark:text-red-400'
+            } transition-colors duration-300`}
           >
             {message}
           </p>

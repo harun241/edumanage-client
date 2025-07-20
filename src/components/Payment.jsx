@@ -28,14 +28,16 @@ const Payment = () => {
         const classRes = await axios.get(`${API_BASE}/classes/${id}`);
         setClassInfo(classRes.data);
 
-        const intentRes = await axios.post(`${API_BASE}/create-payment-intent`,
+        const intentRes = await axios.post(
+          `${API_BASE}/create-payment-intent`,
           { classId: id },
           {
             headers: {
               'x-user-email': user.email,
               'x-user-role': user.role || 'student',
-            }
-          });
+            },
+          }
+        );
         setClientSecret(intentRes.data.clientSecret);
       } catch (err) {
         console.error('Failed to load payment info:', err);
@@ -85,18 +87,22 @@ const Payment = () => {
       }
 
       // 4. Save to backend
-      const res = await axios.post(`${API_BASE}/payment-success`, {
-        classId: classInfo._id,
-        email: user.email,
-        amount: classInfo.price,
-        paymentId: paymentIntent.id,
-        classTitle: classInfo.title,
-      }, {
-        headers: {
-          'x-user-email': user.email,
-          'x-user-role': user.role || 'student',
+      const res = await axios.post(
+        `${API_BASE}/payment-success`,
+        {
+          classId: classInfo._id,
+          email: user.email,
+          amount: classInfo.price,
+          paymentId: paymentIntent.id,
+          classTitle: classInfo.title,
+        },
+        {
+          headers: {
+            'x-user-email': user.email,
+            'x-user-role': user.role || 'student',
+          },
         }
-      });
+      );
 
       if (res.data.success) {
         setSuccess('✅ Payment & enrollment successful!');
@@ -104,7 +110,6 @@ const Payment = () => {
       } else {
         throw new Error('Payment succeeded but saving enrollment failed.');
       }
-
     } catch (err) {
       console.error('Error:', err);
       setError(err.message || 'Something went wrong.');
@@ -114,24 +119,45 @@ const Payment = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 border rounded-lg shadow">
+    <div className="max-w-md mx-auto mt-10 p-6 border rounded-lg shadow
+                    bg-white text-gray-900
+                    dark:bg-gray-900 dark:text-gray-100">
       <h2 className="text-xl font-semibold mb-4">
         Pay for: {classInfo?.title || 'Loading...'}
       </h2>
 
       <form onSubmit={handleSubmit}>
-        <CardElement className="border p-2 rounded mb-4" />
+        <div
+          className="border rounded mb-4
+                     bg-white dark:bg-gray-800
+                     p-2
+                     text-gray-900 dark:text-gray-100"
+        >
+          <CardElement />
+        </div>
+
         <button
           type="submit"
           disabled={!stripe || !clientSecret || loading}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+          className="bg-blue-600 text-white px-4 py-2 rounded
+                     hover:bg-blue-700
+                     disabled:opacity-50 disabled:cursor-not-allowed
+                     transition-colors"
         >
           {loading ? 'Processing...' : `Pay $${classInfo?.price || '0'}`}
         </button>
       </form>
 
-      {error && <p className="text-red-600 mt-4">{error}</p>}
-      {success && <p className="text-green-600 mt-4">{success}</p>}
+      {error && (
+        <p className="text-red-600 dark:text-red-400 mt-4 whitespace-pre-wrap">
+          {error}
+        </p>
+      )}
+      {success && (
+        <p className="text-green-600 dark:text-green-400 mt-4 whitespace-pre-wrap">
+          {success}
+        </p>
+      )}
     </div>
   );
 };

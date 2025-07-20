@@ -60,19 +60,30 @@ const MyEnrolledClasses = () => {
 
   if (!user || loading) return <Loader />;
 
-  if (error) return <p className="text-center text-red-500 py-6">{error}</p>;
+  if (error)
+    return (
+      <p className="text-center text-red-600 dark:text-red-400 py-6 transition-colors duration-300">
+        {error}
+      </p>
+    );
 
   if (enrolledClasses.length === 0)
-    return <p className="text-center text-gray-500 py-6">You have not enrolled in any class yet.</p>;
+    return (
+      <p className="text-center text-gray-600 dark:text-gray-400 py-6 transition-colors duration-300">
+        You have not enrolled in any class yet.
+      </p>
+    );
 
   return (
-    <div className="p-6 max-w-5xl mx-auto">
-      <h2 className="text-3xl font-bold mb-6 text-center">My Enrolled Classes</h2>
+    <div className="p-6 max-w-5xl mx-auto bg-white  rounded-lg transition-colors duration-300">
+      <h2 className="text-3xl font-bold mb-6 text-center text-gray-900 dark:text-white py-2 dark:bg-gray-700 transition-colors duration-300">
+        My Enrolled Classes
+      </h2>
       <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {enrolledClasses.map(cls => (
           <li
             key={cls._id}
-            className="border rounded-lg p-4 shadow hover:shadow-lg transition duration-200 flex flex-col"
+            className="border border-gray-300 dark:border-gray-700 rounded-2xl p-4 shadow-sm dark:shadow-md hover:shadow-lg dark:hover:shadow-lg transition duration-200 flex flex-col bg-white dark:bg-gray-800"
           >
             {cls.image && (
               <img
@@ -81,12 +92,16 @@ const MyEnrolledClasses = () => {
                 className="w-full h-40 object-cover rounded-md mb-4"
               />
             )}
-            <h3 className="text-xl font-semibold">{cls.title}</h3>
-            <p className="text-gray-600 mt-1 flex-grow">{cls.description}</p>
-            <p className="mt-2 font-semibold">Price: ${cls.price}</p>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+              {cls.title}
+            </h3>
+            <p className="text-gray-700 dark:text-gray-300 mt-1 flex-grow">{cls.description}</p>
+            <p className="mt-2 font-semibold text-gray-900 dark:text-gray-100">
+              Price: ${cls.price}
+            </p>
             <Link
               to={`/dashboard/student/my-classes/${cls._id}`}
-              className="inline-block mt-4 bg-blue-600 text-white py-2 rounded hover:bg-blue-700 text-center"
+              className="inline-block mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded text-center transition-colors duration-300"
             >
               Continue
             </Link>

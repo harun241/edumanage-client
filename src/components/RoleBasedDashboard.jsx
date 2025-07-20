@@ -1,4 +1,3 @@
-// src/components/RoleBasedDashboard.jsx
 import React, { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -31,14 +30,14 @@ const RoleBasedDashboard = () => {
     return <StudentSidebar />;
   };
 
-  if (loading) return <Loader></Loader>
+  if (loading) return <Loader />;
 
   return (
-    <div className="min-h-screen grid grid-cols-12">
-      <aside className="col-span-12 md:col-span-3 bg-gray-100 p-4 shadow-md min-h-screen">
+    <div className="min-h-screen grid grid-cols-12 bg-gray-50 dark:bg-gray-900 transition-colors duration-500">
+      <aside className="col-span-12 md:col-span-3 bg-gray-100 dark:bg-gray-800 p-4 shadow-md min-h-screen transition-colors duration-500">
         {renderSidebar()}
       </aside>
-      <main className="col-span-12 md:col-span-9 p-4 bg-white">
+      <main className="col-span-12 md:col-span-9 p-6 bg-white dark:bg-gray-900 transition-colors duration-500 text-gray-900 dark:text-gray-100">
         <Outlet />
       </main>
     </div>

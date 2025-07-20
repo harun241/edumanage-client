@@ -1,17 +1,15 @@
 import React from "react";
 import useAuth from "../../../hooks/useAuth";
 
-
 const AdminProfile = () => {
   const { user } = useAuth();
 
-  const role = user?.role || "student"; 
+  const role = user?.role || "student";
   const phone = user?.phone || "+880123456789";
 
   return (
-
-    <div className="max-w-3xl mx-auto mt-20 p-6 bg-white rounded shadow-md">
-      <h1 className="text-3xl font-bold mb-6">User Profile</h1>
+    <div className="max-w-3xl mx-auto mt-20 p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-md text-gray-800 dark:text-gray-200">
+      <h1 className="text-3xl font-bold mb-6 text-center">User Profile</h1>
 
       <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
         {/* Profile Image */}
@@ -24,25 +22,25 @@ const AdminProfile = () => {
         </div>
 
         {/* User Info */}
-        <div className="flex-1">
-          <div className="mb-4">
+        <div className="flex-1 space-y-4">
+          <div>
             <h2 className="text-xl font-semibold">Name:</h2>
-            <p className="text-gray-700">{user?.displayName || "No name found"}</p>
+            <p>{user?.displayName || "No name found"}</p>
           </div>
 
-          <div className="mb-4">
+          <div>
             <h2 className="text-xl font-semibold">Role:</h2>
-            <p className="text-gray-700">{role}</p>
+            <p>{role}</p>
           </div>
 
-          <div className="mb-4">
+          <div>
             <h2 className="text-xl font-semibold">Email:</h2>
-            <p className="text-gray-700">{user?.email || "No email found"}</p>
+            <p>{user?.email || "No email found"}</p>
           </div>
 
-          <div className="mb-4">
+          <div>
             <h2 className="text-xl font-semibold">Phone:</h2>
-            <p className="text-gray-700">{phone}</p>
+            <p>{phone}</p>
           </div>
         </div>
       </div>

@@ -17,35 +17,38 @@ const Feedbacks = () => {
       .catch(() => setLoading(false));
   }, []);
 
-  if (loading) return <p className="text-center mt-10">Loading feedbacks...</p>;
+  if (loading)
+    return <p className="text-center mt-10 text-gray-500">Loading feedbacks...</p>;
   if (feedbacks.length === 0)
-    return <p className="text-center mt-10">No feedbacks found.</p>;
+    return <p className="text-center mt-10 text-gray-500">No feedbacks found.</p>;
 
   const settings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 1, // or more if you want
+    slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 4000,
     responsive: [
       { breakpoint: 1024, settings: { slidesToShow: 2 } },
-      { breakpoint: 640, settings: { slidesToShow: 1 } },
+      { breakpoint: 768, settings: { slidesToShow: 1 } },
     ],
   };
 
   return (
     <div className="max-w-6xl mx-auto p-6">
-      <h2 className="text-3xl font-bold mb-8 text-center">Teacher Feedbacks</h2>
+      <h2 className="text-3xl font-bold mb-8 text-center text-gray-900 dark:text-gray-100">
+        Teacher Feedbacks
+      </h2>
       <Slider {...settings}>
         {feedbacks.map(({ _id, feedback, user, classTitle }) => (
           <div key={_id} className="p-4">
             <div
-              className="border rounded-lg p-6 shadow-lg h-full flex flex-col justify-between"
-              style={{ maxWidth: "300px", margin: "0 auto" }}
+              className="border rounded-lg p-6 shadow-lg h-full flex flex-col justify-between bg-white dark:bg-gray-800 transition-colors duration-300"
+              style={{ maxWidth: "320px", margin: "0 auto" }}
             >
-              <p className="text-gray-800 italic mb-4">"{feedback}"</p>
+              <p className="text-gray-800 dark:text-gray-200 italic mb-4">&quot;{feedback}&quot;</p>
               <div className="flex items-center mt-auto">
                 <img
                   src={user?.photo || "/default-avatar.png"}
@@ -53,8 +56,12 @@ const Feedbacks = () => {
                   className="w-14 h-14 rounded-full object-cover mr-4"
                 />
                 <div>
-                  <p className="font-semibold text-lg">{user?.name || "Anonymous"}</p>
-                  <p className="text-sm text-gray-600">{classTitle || "Class"}</p>
+                  <p className="font-semibold text-lg text-gray-900 dark:text-gray-100">
+                    {user?.name || "Anonymous"}
+                  </p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {classTitle || "Class"}
+                  </p>
                 </div>
               </div>
             </div>

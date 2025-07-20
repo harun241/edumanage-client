@@ -20,21 +20,25 @@ const partners = [
 
 const Partners = () => {
   return (
-    <div className="my-12 px-6">
-      <h2 className="text-3xl font-bold text-center mb-8">Our Partners</h2>
+    <section className="my-12 px-6 py-12 bg-gray-50 dark:bg-gray-900">
+      <h2 className="text-3xl font-bold text-center mb-10 text-gray-800 dark:text-white">Our Partners</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {partners.map((partner, index) => (
           <div
             key={index}
-            className="bg-white p-6 shadow rounded-lg flex flex-col items-center text-center"
+            className="bg-white dark:bg-gray-800 p-6 shadow-md rounded-xl flex flex-col items-center text-center transition hover:shadow-lg"
           >
-            <img src={partner.logo} alt={partner.name} className="h-20 mb-4" />
-            <h4 className="text-xl font-semibold mb-2">{partner.name}</h4>
-            <p className="text-gray-600">{partner.description}</p>
+            <img
+              src={partner.logo}
+              alt={partner.name}
+              className="w-24 h-24 object-cover rounded-full mb-4 border border-gray-200"
+            />
+            <h4 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">{partner.name}</h4>
+            <p className="text-gray-600 dark:text-gray-300">{partner.description}</p>
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 

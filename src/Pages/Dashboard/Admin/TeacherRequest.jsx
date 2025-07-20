@@ -13,7 +13,7 @@ const TeacherRequest = () => {
       try {
         const res = await axios.get('http://localhost:3000/api/users/teacher-requests', {
           headers: {
-            'x-user-email': 'admin@example.com', // Replace with dynamic email from context if available
+            'x-user-email': 'admin@example.com', // Replace dynamically if needed
             'x-user-role': 'admin',
           },
         });
@@ -57,35 +57,52 @@ const TeacherRequest = () => {
       alert('❌ Deny failed');
     }
   };
-  if (loading) return <Loader/>;
 
-  if (error) return <p className="text-center text-red-600 mt-10">{error}</p>;
-  if (requests.length === 0) return <p className="text-center text-gray-600 mt-10">No pending teacher requests.</p>;
+  if (loading) return <Loader />;
+
+  if (error)
+    return (
+      <p className="text-center text-red-600 mt-10 dark:text-red-400 transition-colors duration-300">
+        {error}
+      </p>
+    );
+  if (requests.length === 0)
+    return (
+      <p className="text-center text-gray-600 mt-10 dark:text-gray-400 transition-colors duration-300">
+        No pending teacher requests.
+      </p>
+    );
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
-      <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">Pending Teacher Requests</h2>
+    <div className="max-w-5xl mx-auto p-6 bg-white dark:bg-gray-900 rounded-lg transition-colors duration-300">
+      <h2 className="text-3xl font-bold text-center mb-8 text-gray-800 dark:text-gray-100 transition-colors duration-300">
+        Pending Teacher Requests
+      </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {requests.map(({ _id, name, email }) => (
           <div
             key={_id}
-            className="bg-white rounded-xl shadow-md p-5 border border-gray-200 hover:shadow-lg transition"
+            className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition duration-300"
           >
-            <p className="text-lg font-semibold text-gray-700 mb-2">👤 {name || 'No Name Provided'}</p>
-            <p className="text-sm text-gray-600 mb-4">📧 {email}</p>
+            <p className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2 transition-colors duration-300">
+              👤 {name || 'No Name Provided'}
+            </p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 transition-colors duration-300">
+              📧 {email}
+            </p>
 
             <div className="flex gap-2">
               <button
                 onClick={() => handleApprove(email)}
-                className="   bg-green-600 hover:bg-green-800 text-white py-2 px-4 rounded-md transition duration-200"
+                className="bg-green-600 hover:bg-green-800 text-white py-2 px-4 rounded-md transition duration-200"
               >
-                 Approve
+                Approve
               </button>
               <button
                 onClick={() => handleDeny(email)}
-                className=" bg-red-600 hover:bg-gray-500 text-white py-2  px-4 rounded-md transition duration-200"
+                className="bg-red-600 hover:bg-red-800 text-white py-2 px-4 rounded-md transition duration-200"
               >
-                 Deny
+                Deny
               </button>
             </div>
           </div>

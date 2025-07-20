@@ -10,8 +10,8 @@ const StudentProfile = () => {
 
   return (
     <div className="max-w-3xl mx-auto mt-20 px-6">
-      <div className="bg-white rounded-2xl shadow-lg p-8 border border-blue-100 ring-1 ring-blue-200">
-        <h1 className="text-3xl font-bold text-center mb-10 text-blue-700">
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-8 border border-blue-100 dark:border-blue-800 ring-1 ring-blue-200 dark:ring-blue-700">
+        <h1 className="text-3xl font-bold text-center mb-10 text-blue-700 dark:text-blue-300">
           My Profile
         </h1>
 
@@ -26,9 +26,9 @@ const StudentProfile = () => {
           </div>
 
           {/* Profile Details */}
-          <div className="flex-1 space-y-5 text-gray-800">
+          <div className="flex-1 space-y-5 text-gray-800 dark:text-gray-200">
             <div className="flex items-center gap-3">
-              <FaUserCircle className="text-blue-600 text-xl" />
+              <FaUserCircle className="text-blue-600 dark:text-blue-400 text-xl" />
               <div>
                 <h2 className="font-semibold text-lg">Name</h2>
                 <p>{user?.displayName || "No name found"}</p>
@@ -36,7 +36,7 @@ const StudentProfile = () => {
             </div>
 
             <div className="flex items-center gap-3">
-              <FaUserTag className="text-blue-600 text-xl" />
+              <FaUserTag className="text-blue-600 dark:text-blue-400 text-xl" />
               <div>
                 <h2 className="font-semibold text-lg">Role</h2>
                 <p>{role}</p>
@@ -44,7 +44,7 @@ const StudentProfile = () => {
             </div>
 
             <div className="flex items-center gap-3">
-              <FaEnvelope className="text-blue-600 text-xl" />
+              <FaEnvelope className="text-blue-600 dark:text-blue-400 text-xl" />
               <div>
                 <h2 className="font-semibold text-lg">Email</h2>
                 <p>{user?.email || "No email found"}</p>
@@ -52,7 +52,7 @@ const StudentProfile = () => {
             </div>
 
             <div className="flex items-center gap-3">
-              <FaPhoneAlt className="text-blue-600 text-xl" />
+              <FaPhoneAlt className="text-blue-600 dark:text-blue-400 text-xl" />
               <div>
                 <h2 className="font-semibold text-lg">Phone</h2>
                 <p>{phone}</p>

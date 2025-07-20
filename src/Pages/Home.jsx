@@ -6,6 +6,9 @@ import WebStats from '../components/WebStats';
 import Partners from '../components/Partners';
 import Feedbacks from '../components/Feedbacks';
 import PopularClasses from '../components/PopularClasses';
+import Footer from '../components/Footer/Footer';
+import TopInstructor from '../components/TopInstructor';
+import StudentStories from '../components/StudentStories';
 
 const Home = () => {
     return (
@@ -15,8 +18,11 @@ const Home = () => {
             <BeInstructor></BeInstructor>
             <WebStats></WebStats>
             <PopularClasses></PopularClasses>
+            <TopInstructor></TopInstructor>
             <Partners></Partners>
+            <StudentStories></StudentStories>
            <Feedbacks></Feedbacks>
+           <Footer></Footer>
            
             
 
