@@ -8,7 +8,7 @@ const Feedbacks = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("edumanage-server-rho.vercel.app/api/feedbacks")
+    fetch("https://edumanage-server-rho.vercel.app/api/feedbacks")
       .then((res) => res.json())
       .then((data) => {
         setFeedbacks(data);
