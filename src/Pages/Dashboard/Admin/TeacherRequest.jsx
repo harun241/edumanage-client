@@ -11,7 +11,7 @@ const TeacherRequest = () => {
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/api/users/teacher-requests', {
+        const res = await axios.get('http://edumanage-server-rho.vercel.app/api/users/teacher-requests', {
           headers: {
             'x-user-email': 'admin@example.com', // Replace dynamically if needed
             'x-user-role': 'admin',
@@ -31,7 +31,7 @@ const TeacherRequest = () => {
   // Approve teacher request
   const handleApprove = async (email) => {
     try {
-      await axios.patch(`http://localhost:3000/api/users/approve-teacher/${email}`, {}, {
+      await axios.patch(`http://edumanage-server-rho.vercel.app/api/users/approve-teacher/${email}`, {}, {
         headers: {
           'x-user-email': 'admin@example.com',
           'x-user-role': 'admin',
@@ -46,7 +46,7 @@ const TeacherRequest = () => {
   // Deny teacher request
   const handleDeny = async (email) => {
     try {
-      await axios.patch(`http://localhost:3000/api/users/deny-teacher/${email}`, {}, {
+      await axios.patch(`http://ledumanage-server-rho.vercel.app/api/users/deny-teacher/${email}`, {}, {
         headers: {
           'x-user-email': 'admin@example.com',
           'x-user-role': 'admin',

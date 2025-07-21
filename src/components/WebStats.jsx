@@ -10,7 +10,7 @@ const WebStats = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/stats");
+        const res = await fetch("http://edumanage-server-rho.vercel.app/api/stats");
         const data = await res.json();
         setStats(data);
       } catch (err) {

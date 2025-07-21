@@ -55,7 +55,7 @@ const TeacherRequestForm = () => {
 
     try {
       await axios.post(
-        'http://localhost:3000/api/users/request-teacher',
+        'http://edumanage-server-rho.vercel.app/api/users/request-teacher',
         {
           name: formData.name,
           experience: formData.experience,

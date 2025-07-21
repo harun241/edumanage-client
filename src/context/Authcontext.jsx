@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
       if (currentUser) {
         try {
           // Get user role from backend
-          const res = await axios.get(`http://localhost:3000/api/users/role?email=${currentUser.email}`);
+          const res = await axios.get(`http://edumanage-server-rho.vercel.app/api/users/role?email=${currentUser.email}`);
           const role = res?.data?.role || "student";
 
           // Set user state

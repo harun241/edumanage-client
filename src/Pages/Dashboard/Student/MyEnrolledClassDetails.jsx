@@ -29,7 +29,7 @@ const MyEnrolledClassDetails = () => {
       try {
         setLoading(true);
         setError(null);
-        const res = await fetch(`http://localhost:3000/assignments?classId=${classId}`);
+        const res = await fetch(`http://edumanage-server-rho.vercel.app/assignments?classId=${classId}`);
         if (!res.ok) throw new Error('Failed to fetch assignments');
         const data = await res.json();
         setAssignments(data);
@@ -57,7 +57,7 @@ const MyEnrolledClassDetails = () => {
     try {
       setSubmitStatus((prev) => ({ ...prev, [assignmentId]: 'loading' }));
 
-      const res = await fetch(`http://localhost:3000/submissions`, {
+      const res = await fetch(`http://edumanage-server-rho.vercel.app/submissions`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -88,7 +88,7 @@ const MyEnrolledClassDetails = () => {
     }
 
     try {
-      const res = await fetch('http://localhost:3000/feedbacks', {
+      const res = await fetch('http://edumanage-server-rho.vercel.app/feedbacks', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

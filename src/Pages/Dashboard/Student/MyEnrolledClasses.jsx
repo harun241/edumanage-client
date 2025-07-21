@@ -18,7 +18,7 @@ const MyEnrolledClasses = () => {
         setError(null);
 
         // ইউজারের এনরোলমেন্টস নিয়ে আসা
-        const enrollRes = await fetch(`http://localhost:3000/enrollments`, {
+        const enrollRes = await fetch(`http://edumanage-server-rho.vercel.app/enrollments`, {
           headers: {
             'x-user-email': user.email,
             'x-user-role': user.role || '',
@@ -39,7 +39,7 @@ const MyEnrolledClasses = () => {
 
         // একসাথে সব ক্লাস ডিটেইল নিয়ে আসা
         const classPromises = uniqueClassIds.map(id =>
-          fetch(`http://localhost:3000/classes/${id}`).then(res => {
+          fetch(`http://edumanage-server-rho.vercel.app/classes/${id}`).then(res => {
             if (!res.ok) throw new Error('Failed to fetch class details');
             return res.json();
           })

@@ -8,7 +8,7 @@ const CheckoutForm = ({ amount }) => {
   const [clientSecret, setClientSecret] = useState("");
 
   useEffect(() => {
-    axios.post("http://localhost:3000/create-payment-intent", { amount })
+    axios.post("http://edumanage-server-rho.vercel.app/create-payment-intent", { amount })
       .then(res => setClientSecret(res.data.clientSecret));
   }, [amount]);
 
