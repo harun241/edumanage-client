@@ -23,7 +23,7 @@ const AddClass = () => {
     };
 
     try {
-      const res = await fetch("http://edumanage-server-rho.vercel.app/classes", {
+      const res = await fetch("https://edumanage-server-rho.vercel.app/classes", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

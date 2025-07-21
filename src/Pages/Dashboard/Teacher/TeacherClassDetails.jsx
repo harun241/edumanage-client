@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Loader from "../../../components/Loader";
 import Swal from "sweetalert2";
 
-const BACKEND = "http://edumanage-server-rho.vercel.app";
+const BACKEND = "https://edumanage-server-rho.vercel.app";
 
 const TeacherClassDetails = () => {
   const { id } = useParams(); // class id

@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import useAuth from "../hooks/useAuth";
 
-const BACKEND = "http://edumanage-server-rho.vercel.app";
+const BACKEND = "https://edumanage-server-rho.vercel.app";
 
 const ClassDetails = () => {
   const { id } = useParams();

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Loader from "../../../components/Loader";
 import useAuth from "../../../hooks/useAuth";
 
-const BACKEND = "http://edumanage-server-rho.vercel.app";
+const BACKEND = "https://edumanage-server-rho.vercel.app";
 
 const AllClasses = () => {
   const { user } = useAuth();

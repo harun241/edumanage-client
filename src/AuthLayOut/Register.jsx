@@ -28,7 +28,7 @@ const Register = () => {
       });
 
       // 3. Save user to backend
-      await fetch("http://edumanage-server-rho.vercel.app/api/users", {
+      await fetch("https://edumanage-server-rho.vercel.app/api/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

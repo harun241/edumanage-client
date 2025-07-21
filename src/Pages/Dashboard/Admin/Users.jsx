@@ -11,7 +11,7 @@ const Users = () => {
     const fetchUsers = async () => {
       try {
         setLoading(true);
-        const res = await axios.get('http://edumanage-server-rho.vercel.app/api/users');
+        const res = await axios.get('https://edumanage-server-rho.vercel.app/api/users');
         setUsers(res.data);
       } catch (err) {
         setError('Failed to load users');

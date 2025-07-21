@@ -7,7 +7,7 @@ const PopularClasses = () => {
   const [popularClasses, setPopularClasses] = useState([]);
 
   useEffect(() => {
-    fetch("http://edumanage-server-rho.vercel.app/api/popular-classes") // Replace with your API
+    fetch("https://edumanage-server-rho.vercel.app/api/popular-classes") // Replace with your API
       .then((res) => res.json())
       .then((data) => setPopularClasses(data));
   }, []);

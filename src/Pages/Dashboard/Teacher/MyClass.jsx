@@ -3,7 +3,7 @@ import useAuth from "../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
-const BACKEND = "http://edumanage-server-rho.vercel.app";
+const BACKEND = "https://edumanage-server-rho.vercel.app";
 
 const MyClass = () => {
   const { user } = useAuth(); // Assuming user has name, email, role
