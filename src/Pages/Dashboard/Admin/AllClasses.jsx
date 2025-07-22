@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Loader from "../../../components/Loader";
 import useAuth from "../../../hooks/useAuth";
 
+
 const BACKEND = "https://edumanage-server-rho.vercel.app";
 
 const AllClasses = () => {
@@ -70,9 +71,15 @@ const AllClasses = () => {
 
   return (
     <div className="px-4 py-8 max-w-7xl mx-auto">
+      
       <h1 className="font-bold text-center text-4xl mb-6 text-gray-900 dark:bg-gray-800 py-2 dark:text-gray-100 ">
         All Classes
       </h1>
+       <div className=" my-5">
+  <Link to={'/'}>
+    <button className="btn bg-blue-500 text-white">Back to Home</button>
+  </Link>
+</div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6  ">
         {classes.map((cls) => (
           <div
@@ -135,6 +142,11 @@ const AllClasses = () => {
           </div>
         ))}
       </div>
+   <div className="flex justify-center items-center mt-10">
+  <Link to={'/'}>
+    <button className="btn bg-blue-500 text-white">Back to Home</button>
+  </Link>
+</div>
     </div>
   );
 };
