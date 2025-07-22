@@ -27,8 +27,8 @@ const TeacherRequestForm = () => {
 
   const [message, setMessage] = useState("");
 
-  const mutation = useMutation(
-    () =>
+  const mutation = useMutation({
+    mutationFn: () =>
       axios.post(
         `${API_BASE}/api/users/request-teacher`,
         {
@@ -44,18 +44,16 @@ const TeacherRequestForm = () => {
           },
         }
       ),
-    {
-      onSuccess: () => {
-        setMessage("✅ Your request has been sent. Please wait for admin approval.");
-      },
-      onError: (error) => {
-        console.error("Request Error:", error);
-        const errMsg =
-          error?.response?.data?.error || "❌ Failed to send request. Try again later.";
-        setMessage(errMsg);
-      },
-    }
-  );
+    onSuccess: () => {
+      setMessage("✅ Your request has been sent. Please wait for admin approval.");
+    },
+    onError: (error) => {
+      console.error("Request Error:", error);
+      const errMsg =
+        error?.response?.data?.error || "❌ Failed to send request. Try again later.";
+      setMessage(errMsg);
+    },
+  });
 
   const handleChange = (e) => {
     setFormData((prev) => ({

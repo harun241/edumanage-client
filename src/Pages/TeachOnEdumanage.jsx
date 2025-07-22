@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import useAuth from "../hooks/useAuth";
 import axios from "axios";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -15,6 +15,7 @@ const categories = [
 
 const experienceLevels = ["Beginner", "Mid-level", "Experienced"];
 
+// Fetch teacher status
 const fetchTeacherStatus = async (email, role) => {
   const res = await axios.get(`${API_BASE}/api/teacher-request/status?email=${email}`, {
     headers: {
@@ -25,6 +26,7 @@ const fetchTeacherStatus = async (email, role) => {
   return res.data.status; // expected: "pending", "approved", "rejected", or null
 };
 
+// Submit teacher request
 const submitTeacherRequest = async ({ formData, email, role }) => {
   const payload = {
     ...formData,
@@ -40,6 +42,7 @@ const submitTeacherRequest = async ({ formData, email, role }) => {
   return res.data;
 };
 
+// Reset teacher request
 const resetRequestStatus = async ({ email, role }) => {
   const res = await axios.patch(
     `${API_BASE}/api/teacher-request`,
@@ -67,49 +70,43 @@ const TeachOnEdumanage = () => {
     image: user?.photoURL || "",
   });
 
-  // Fetch status using react-query
+  // Query: Fetch request status
   const {
     data: status,
     isLoading,
     isError,
     error,
-  } = useQuery(
-    ["teacherStatus", user?.email],
-    () => fetchTeacherStatus(user.email, user.role),
-    {
-      enabled: !!user?.email,
-    }
-  );
+  } = useQuery({
+    queryKey: ["teacherStatus", user?.email],
+    queryFn: () => fetchTeacherStatus(user.email, user.role),
+    enabled: !!user?.email,
+  });
 
-  // Mutation for submitting teacher request
-  const submitMutation = useMutation(
-    () => submitTeacherRequest({ formData, email: user.email, role: user.role }),
-    {
-      onSuccess: () => {
-        alert("Your request has been submitted for review.");
-        queryClient.invalidateQueries(["teacherStatus"]);
-      },
-      onError: (err) => {
-        alert("Failed to submit request.");
-        console.error(err);
-      },
-    }
-  );
+  // Mutation: Submit request
+  const submitMutation = useMutation({
+    mutationFn: () => submitTeacherRequest({ formData, email: user.email, role: user.role }),
+    onSuccess: () => {
+      alert("Your request has been submitted for review.");
+      queryClient.invalidateQueries(["teacherStatus"]);
+    },
+    onError: (err) => {
+      alert("Failed to submit request.");
+      console.error(err);
+    },
+  });
 
-  // Mutation for resetting request status
-  const resetMutation = useMutation(
-    () => resetRequestStatus({ email: user.email, role: user.role }),
-    {
-      onSuccess: () => {
-        alert("Your request status has been reset to pending.");
-        queryClient.invalidateQueries(["teacherStatus"]);
-      },
-      onError: (err) => {
-        alert("Failed to reset request status.");
-        console.error(err);
-      },
-    }
-  );
+  // Mutation: Reset request status
+  const resetMutation = useMutation({
+    mutationFn: () => resetRequestStatus({ email: user.email, role: user.role }),
+    onSuccess: () => {
+      alert("Your request status has been reset to pending.");
+      queryClient.invalidateQueries(["teacherStatus"]);
+    },
+    onError: (err) => {
+      alert("Failed to reset request status.");
+      console.error(err);
+    },
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -132,8 +129,7 @@ const TeachOnEdumanage = () => {
   };
 
   if (isLoading) return <p>Loading...</p>;
-  if (isError)
-    return <p>Error loading status: {error.message || "Something went wrong"}</p>;
+  if (isError) return <p>Error loading status: {error.message || "Something went wrong"}</p>;
 
   if (status === "approved")
     return <p className="max-w-md mx-auto p-6 text-center">You are already approved as a teacher. Thank you!</p>;
@@ -147,12 +143,11 @@ const TeachOnEdumanage = () => {
           disabled={resetMutation.isLoading}
           className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
         >
-          {resetMutation.isLoading ? "Submitting..." : "Request to Another"}
+          {resetMutation.isLoading ? "Submitting..." : "Request Again"}
         </button>
       </div>
     );
 
-  // status is pending or null (no request yet)
   return (
     <div className="max-w-md mx-auto p-6 border rounded shadow">
       <h2 className="text-2xl font-semibold mb-4 text-center">Apply to Teach on EduManage</h2>
@@ -239,3 +234,4 @@ const TeachOnEdumanage = () => {
 };
 
 export default TeachOnEdumanage;
+ 

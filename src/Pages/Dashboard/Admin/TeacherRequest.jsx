@@ -1,113 +1,98 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import Loader from '../../../components/Loader';
+import React from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { FaCheck, FaTimes } from "react-icons/fa";
 
 const TeacherRequest = () => {
-  const [requests, setRequests] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const queryClient = useQueryClient();
 
-  // Fetch all teacher requests
-  useEffect(() => {
-    const fetchRequests = async () => {
-      try {
-        const res = await axios.get('https://edumanage-server-rho.vercel.app/api/users/teacher-requests', {
-          headers: {
-            'x-user-email': 'admin@example.com', // Replace dynamically if needed
-            'x-user-role': 'admin',
-          },
-        });
-        setRequests(res.data);
-      } catch (err) {
-        setError('❌ Failed to load requests');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchRequests();
-  }, []);
-
-  // Approve teacher request
-  const handleApprove = async (email) => {
-    try {
-      await axios.patch(`https://edumanage-server-rho.vercel.app/api/users/approve-teacher/${email}`, {}, {
+  // Fetch teacher requests
+  const { data: requests = [], isLoading } = useQuery({
+    queryKey: ["teacherRequests"],
+    queryFn: async () => {
+      const res = await axios.get("https://edumanage-server-rho.vercel.app/api/users/teacher-requests", {
         headers: {
-          'x-user-email': 'admin@example.com',
-          'x-user-role': 'admin',
+          "x-user-email": "admin@example.com",
+          "x-user-role": "admin",
         },
       });
-      setRequests((prev) => prev.filter((r) => r.email !== email));
-    } catch {
-      alert('❌ Approve failed');
-    }
-  };
+      return res.data;
+    },
+  });
 
-  // Deny teacher request
-  const handleDeny = async (email) => {
-    try {
-      await axios.patch(`https://edumanage-server-rho.vercel.appapi/users/deny-teacher/${email}`, {}, {
+  // Approve Mutation
+  const approveMutation = useMutation({
+    mutationFn: async (email) => {
+      return await axios.patch(`https://edumanage-server-rho.vercel.app/api/users/approve-teacher/${email}`, {}, {
         headers: {
-          'x-user-email': 'admin@example.com',
-          'x-user-role': 'admin',
+          "x-user-email": "admin@example.com",
+          "x-user-role": "admin",
         },
       });
-      setRequests((prev) => prev.filter((r) => r.email !== email));
-    } catch {
-      alert('❌ Deny failed');
-    }
-  };
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["teacherRequests"]);
+    },
+    onError: () => {
+      alert("❌ Approval failed");
+    },
+  });
 
-  if (loading) return <Loader />;
+  // Deny Mutation
+  const denyMutation = useMutation({
+    mutationFn: async (email) => {
+      return await axios.patch(`https://edumanage-server-rho.vercel.app/api/users/deny-teacher/${email}`, {}, {
+        headers: {
+          "x-user-email": "admin@example.com",
+          "x-user-role": "admin",
+        },
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["teacherRequests"]);
+    },
+    onError: () => {
+      alert("❌ Deny failed");
+    },
+  });
 
-  if (error)
-    return (
-      <p className="text-center text-red-600 mt-10 dark:text-red-400 transition-colors duration-300">
-        {error}
-      </p>
-    );
+  if (isLoading) return <div className="text-center py-10">Loading...</div>;
+
   if (requests.length === 0)
-    return (
-      <p className="text-center text-gray-600 mt-10 dark:text-gray-400 transition-colors duration-300">
-        No pending teacher requests.
-      </p>
-    );
+    return <div className="text-center py-10 text-gray-500">No pending teacher requests.</div>;
 
   return (
-    <div className="max-w-5xl mx-auto p-6 bg-white dark:bg-gray-900 rounded-lg transition-colors duration-300">
-      <h2 className="text-3xl font-bold text-center mb-8 text-gray-800 dark:text-gray-100 transition-colors duration-300">
-        Pending Teacher Requests
-      </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {requests.map(({ _id, name, email }) => (
-          <div
-            key={_id}
-            className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition duration-300"
+    <div className="max-w-4xl mx-auto mt-10 p-4">
+      <h1 className="text-2xl font-bold mb-6">Pending Teacher Requests</h1>
+      <ul className="space-y-4">
+        {requests.map((req) => (
+          <li
+            key={req.email}
+            className="flex items-center justify-between bg-white dark:bg-gray-800 p-4 rounded-xl shadow"
           >
-            <p className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2 transition-colors duration-300">
-              👤 {name || 'No Name Provided'}
-            </p>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 transition-colors duration-300">
-              📧 {email}
-            </p>
-
-            <div className="flex gap-2">
+            <div>
+              <h2 className="font-semibold text-lg">{req.name}</h2>
+              <p className="text-sm text-gray-500">{req.email}</p>
+            </div>
+            <div className="flex gap-4">
               <button
-                onClick={() => handleApprove(email)}
-                className="bg-green-600 hover:bg-green-800 text-white py-2 px-4 rounded-md transition duration-200"
+                onClick={() => approveMutation.mutate(req.email)}
+                className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-full"
+                title="Approve"
               >
-                Approve
+                <FaCheck />
               </button>
               <button
-                onClick={() => handleDeny(email)}
-                className="bg-red-600 hover:bg-red-800 text-white py-2 px-4 rounded-md transition duration-200"
+                onClick={() => denyMutation.mutate(req.email)}
+                className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full"
+                title="Deny"
               >
-                Deny
+                <FaTimes />
               </button>
             </div>
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 };
