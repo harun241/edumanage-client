@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut, getIdToken } from "firebase/auth";
 import axios from "axios";
 import { auth } from "../../Firebase.config";
 
@@ -15,33 +15,33 @@ export const AuthProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         try {
+          const idToken = await getIdToken(currentUser);
+
           // Get user role from backend
-          const res = await axios.get(`http://edumanage-server-rho.vercel.app/api/users/role?email=${currentUser.email}`);
+          const res = await axios.get(
+            `https://edumanage-server-rho.vercel.app/api/users/role?email=${currentUser.email}`
+          );
           const role = res?.data?.role || "student";
 
-          // Set user state
-          setUser({
+          const newUser = {
             displayName: currentUser.displayName,
             email: currentUser.email,
             photoURL: currentUser.photoURL || "",
             role,
-          });
+            token: idToken,
+          };
 
-          // Optional: Store to localStorage
-          localStorage.setItem(
-            "edu-user",
-            JSON.stringify({
-              email: currentUser.email,
-              role,
-            })
-          );
+          setUser(newUser);
+
+          // Save JWT token and user info to localStorage
+          localStorage.setItem("edu-user", JSON.stringify(newUser));
         } catch (err) {
-          console.error("Failed to fetch user role:", err.message);
+          console.error("User setup error:", err);
           setUser({
             displayName: currentUser.displayName,
             email: currentUser.email,
             photoURL: currentUser.photoURL || "",
-            role: "student", 
+            role: "student",
           });
         }
       } else {
@@ -55,16 +55,16 @@ export const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
+  // ✅ Return a Promise so .then() works in calling components
   const logOut = () => {
-    signOut(auth)
+    return signOut(auth)
       .then(() => {
         setUser(null);
         localStorage.removeItem("edu-user");
-        // Optional: toast.success("Logged out")
       })
       .catch((err) => {
         console.error("Logout error:", err);
-        // Optional: toast.error("Logout failed")
+        throw err;
       });
   };
 

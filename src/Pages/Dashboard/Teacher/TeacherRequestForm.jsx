@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import useAuth from '../../../hooks/useAuth';
+import React, { useState } from "react";
+import axios from "axios";
+import useAuth from "../../../hooks/useAuth";
+import { useMutation } from "@tanstack/react-query";
 
 const categories = [
   "Web Development",
@@ -12,18 +13,49 @@ const categories = [
 
 const experiences = ["beginner", "mid-level", "experienced"];
 
+const API_BASE = "https://edumanage-server-rho.vercel.app";
+
 const TeacherRequestForm = () => {
   const { user } = useAuth();
 
   const [formData, setFormData] = useState({
-    name: user?.displayName || '',
-    experience: '',
-    title: '',
-    category: '',
+    name: user?.displayName || "",
+    experience: "",
+    title: "",
+    category: "",
   });
 
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
+
+  const mutation = useMutation(
+    () =>
+      axios.post(
+        `${API_BASE}/api/users/request-teacher`,
+        {
+          name: formData.name,
+          experience: formData.experience,
+          title: formData.title,
+          category: formData.category,
+        },
+        {
+          headers: {
+            "x-user-email": user.email,
+            "x-user-role": user.role || "student",
+          },
+        }
+      ),
+    {
+      onSuccess: () => {
+        setMessage("✅ Your request has been sent. Please wait for admin approval.");
+      },
+      onError: (error) => {
+        console.error("Request Error:", error);
+        const errMsg =
+          error?.response?.data?.error || "❌ Failed to send request. Try again later.";
+        setMessage(errMsg);
+      },
+    }
+  );
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -32,11 +64,11 @@ const TeacherRequestForm = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!user?.email) {
-      setMessage('⚠️ Please login first to send a request.');
+      setMessage("⚠️ Please login first to send a request.");
       return;
     }
 
@@ -46,38 +78,12 @@ const TeacherRequestForm = () => {
       !formData.title.trim() ||
       !formData.category
     ) {
-      setMessage('⚠️ Please fill all required fields.');
+      setMessage("⚠️ Please fill all required fields.");
       return;
     }
 
-    setLoading(true);
-    setMessage('');
-
-    try {
-      await axios.post(
-        'https://edumanage-server-rho.vercel.app/api/users/request-teacher',
-        {
-          name: formData.name,
-          experience: formData.experience,
-          title: formData.title,
-          category: formData.category,
-        },
-        {
-          headers: {
-            'x-user-email': user.email,
-            'x-user-role': user.role || 'student',
-          },
-        }
-      );
-
-      setMessage('✅ Your request has been sent. Please wait for admin approval.');
-    } catch (error) {
-      console.error('Request Error:', error);
-      const errMsg = error?.response?.data?.error || '❌ Failed to send request. Try again later.';
-      setMessage(errMsg);
-    } finally {
-      setLoading(false);
-    }
+    setMessage("");
+    mutation.mutate();
   };
 
   return (
@@ -150,7 +156,7 @@ const TeacherRequestForm = () => {
           >
             <option value="">Select category</option>
             {categories.map((cat) => (
-              <option key={cat} value={cat.toLowerCase().replace(/\s/g, '-')}>
+              <option key={cat} value={cat.toLowerCase().replace(/\s/g, "-")}>
                 {cat}
               </option>
             ))}
@@ -159,20 +165,20 @@ const TeacherRequestForm = () => {
 
         <button
           type="submit"
-          disabled={loading}
+          disabled={mutation.isLoading}
           className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition-all duration-200 disabled:opacity-50"
         >
-          {loading ? 'Sending Request...' : 'Send Request'}
+          {mutation.isLoading ? "Sending Request..." : "Send Request"}
         </button>
 
         {message && (
           <p
             className={`mt-4 text-center text-sm ${
-              message.startsWith('✅')
-                ? 'text-green-600 dark:text-green-400'
-                : message.startsWith('⚠️')
-                ? 'text-yellow-600 dark:text-yellow-400'
-                : 'text-red-600 dark:text-red-400'
+              message.startsWith("✅")
+                ? "text-green-600 dark:text-green-400"
+                : message.startsWith("⚠️")
+                ? "text-yellow-600 dark:text-yellow-400"
+                : "text-red-600 dark:text-red-400"
             } transition-colors duration-300`}
           >
             {message}

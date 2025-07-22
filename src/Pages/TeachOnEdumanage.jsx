@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from "react";
-import useAuth from "../hooks/useAuth"; // Your auth hook/context
+import React, { useState, useEffect } from "react";
+import useAuth from "../hooks/useAuth";
 import axios from "axios";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+
+const API_BASE = "https://edumanage-server-rho.vercel.app";
 
 const categories = [
   "Web Development",
@@ -12,102 +15,148 @@ const categories = [
 
 const experienceLevels = ["Beginner", "Mid-level", "Experienced"];
 
+const fetchTeacherStatus = async (email, role) => {
+  const res = await axios.get(`${API_BASE}/api/teacher-request/status?email=${email}`, {
+    headers: {
+      "x-user-email": email,
+      "x-user-role": role || "student",
+    },
+  });
+  return res.data.status; // expected: "pending", "approved", "rejected", or null
+};
+
+const submitTeacherRequest = async ({ formData, email, role }) => {
+  const payload = {
+    ...formData,
+    email,
+    status: "pending",
+  };
+  const res = await axios.post(`${API_BASE}/api/teacher-request`, payload, {
+    headers: {
+      "x-user-email": email,
+      "x-user-role": role || "student",
+    },
+  });
+  return res.data;
+};
+
+const resetRequestStatus = async ({ email, role }) => {
+  const res = await axios.patch(
+    `${API_BASE}/api/teacher-request`,
+    { email, status: "pending" },
+    {
+      headers: {
+        "x-user-email": email,
+        "x-user-role": role || "student",
+      },
+    }
+  );
+  return res.data;
+};
+
 const TeachOnEdumanage = () => {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
+
   const [formData, setFormData] = useState({
     name: user?.displayName || "",
     email: user?.email || "",
     experience: "",
     title: "",
     category: "",
+    image: user?.photoURL || "",
   });
-  const [status, setStatus] = useState(null); // pending, approved, rejected, or null
-  const [loading, setLoading] = useState(true);
 
-  // Fetch current teacher request status for this user
-  useEffect(() => {
-    if (user?.email) {
-      axios
-        .get(`/api/teacher-request/status?email=${user.email}`)
-        .then((res) => {
-          setStatus(res.data.status); // "pending", "approved", "rejected", or null
-          setLoading(false);
-        })
-        .catch(() => {
-          setStatus(null);
-          setLoading(false);
-        });
+  // Fetch status using react-query
+  const {
+    data: status,
+    isLoading,
+    isError,
+    error,
+  } = useQuery(
+    ["teacherStatus", user?.email],
+    () => fetchTeacherStatus(user.email, user.role),
+    {
+      enabled: !!user?.email,
     }
-  }, [user]);
+  );
+
+  // Mutation for submitting teacher request
+  const submitMutation = useMutation(
+    () => submitTeacherRequest({ formData, email: user.email, role: user.role }),
+    {
+      onSuccess: () => {
+        alert("Your request has been submitted for review.");
+        queryClient.invalidateQueries(["teacherStatus"]);
+      },
+      onError: (err) => {
+        alert("Failed to submit request.");
+        console.error(err);
+      },
+    }
+  );
+
+  // Mutation for resetting request status
+  const resetMutation = useMutation(
+    () => resetRequestStatus({ email: user.email, role: user.role }),
+    {
+      onSuccess: () => {
+        alert("Your request status has been reset to pending.");
+        queryClient.invalidateQueries(["teacherStatus"]);
+      },
+      onError: (err) => {
+        alert("Failed to reset request status.");
+        console.error(err);
+      },
+    }
+  );
 
   const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (
-      !formData.name ||
-      !formData.experience ||
-      !formData.title ||
-      !formData.category
-    ) {
+
+    if (!formData.name || !formData.experience || !formData.title || !formData.category) {
       alert("Please fill all required fields");
       return;
     }
 
-    try {
-      const payload = {
-        ...formData,
-        email: user.email,
-        image: user.photoURL || "", // user's profile image
-        status: "pending",
-      };
-      await axios.post("/api/teacher-request", payload);
-      alert("Your request has been submitted for review.");
-      setStatus("pending");
-    } catch (err) {
-      alert("Failed to submit request.");
-      console.error(err);
-    }
+    submitMutation.mutate();
   };
 
-  const handleRequestAnother = async () => {
-    try {
-      await axios.patch("/api/teacher-request", {
-        email: user.email,
-        status: "pending",
-      });
-      alert("Your request status has been reset to pending.");
-      setStatus("pending");
-    } catch (err) {
-      alert("Failed to reset request status.");
-      console.error(err);
-    }
+  const handleRequestAnother = () => {
+    resetMutation.mutate();
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (isLoading) return <p>Loading...</p>;
+  if (isError)
+    return <p>Error loading status: {error.message || "Something went wrong"}</p>;
 
   if (status === "approved")
-    return <p>You are already approved as a teacher. Thank you!</p>;
+    return <p className="max-w-md mx-auto p-6 text-center">You are already approved as a teacher. Thank you!</p>;
 
   if (status === "rejected")
     return (
-      <div>
+      <div className="max-w-md mx-auto p-6 border rounded shadow text-center">
         <p>Your teacher request was rejected.</p>
-        <button onClick={handleRequestAnother}>Request to Another</button>
+        <button
+          onClick={handleRequestAnother}
+          disabled={resetMutation.isLoading}
+          className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+        >
+          {resetMutation.isLoading ? "Submitting..." : "Request to Another"}
+        </button>
       </div>
     );
 
-  // status is pending or null (no request yet) => show form
+  // status is pending or null (no request yet)
   return (
     <div className="max-w-md mx-auto p-6 border rounded shadow">
-      <h2 className="text-2xl font-semibold mb-4">Apply to Teach on [Your Website]</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-center">Apply to Teach on EduManage</h2>
       <form onSubmit={handleSubmit}>
-
         <label className="block mb-2 font-medium">Name</label>
         <input
           type="text"
@@ -120,7 +169,7 @@ const TeachOnEdumanage = () => {
 
         <label className="block mb-2 font-medium">Your Image</label>
         <img
-          src={user?.photoURL || "https://via.placeholder.com/150"}
+          src={formData.image || "https://via.placeholder.com/150"}
           alt="Profile"
           className="w-24 h-24 rounded-full mb-4"
         />
@@ -179,9 +228,10 @@ const TeachOnEdumanage = () => {
 
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          disabled={submitMutation.isLoading}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50 w-full"
         >
-          Submit for Review
+          {submitMutation.isLoading ? "Submitting..." : "Submit for Review"}
         </button>
       </form>
     </div>
