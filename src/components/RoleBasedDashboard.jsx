@@ -33,11 +33,18 @@ const RoleBasedDashboard = () => {
   if (loading) return <Loader />;
 
   return (
-    <div className="min-h-screen grid grid-cols-12 bg-gray-50 dark:bg-gray-900 transition-colors duration-500">
-      <aside className="col-span-12 md:col-span-3 bg-gray-100 dark:bg-gray-800 p-4 shadow-md min-h-screen transition-colors duration-500">
+    <div className="min-h-screen flex flex-col md:flex-row bg-gray-50 dark:bg-gray-900 transition-colors duration-500">
+      {/* Sidebar */}
+      <aside className="bg-gray-100 dark:bg-gray-800 shadow-md transition-colors duration-500
+                        w-full md:w-64 flex-shrink-0
+                        min-h-[60vh] md:min-h-screen
+                        overflow-auto
+                        ">
         {renderSidebar()}
       </aside>
-      <main className="col-span-12 md:col-span-9 p-6 bg-white dark:bg-gray-900 transition-colors duration-500 text-gray-900 dark:text-gray-100">
+
+      {/* Main content */}
+      <main className="flex-grow p-6 bg-white dark:bg-gray-900 transition-colors duration-500 text-gray-900 dark:text-gray-100 min-h-[60vh] md:min-h-screen overflow-auto">
         <Outlet />
       </main>
     </div>
