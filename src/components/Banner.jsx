@@ -25,7 +25,12 @@ const Banner = () => {
             <img
               src={img}
               alt={`Slide ${index + 1}`}
-              className="w-full h-[500px]  object-cover"
+              className="w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[500px] object-cover"
+              // Explanation:
+              // h-[250px] on very small screens (phones)
+              // sm:h-[350px] on small screens
+              // md:h-[450px] on medium screens
+              // lg:h-[500px] on large screens and above
             />
             <div className="absolute bottom-4 left-4 md:left-8 bg-black bg-opacity-70 text-white p-4 rounded-md max-w-xs md:max-w-md">
               {index === 0 && (

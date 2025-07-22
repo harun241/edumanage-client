@@ -45,6 +45,7 @@ import ClassDetails from "../pages/ClassDetails";
 import Payment from "../components/Payment";
 import MyEnrolledClassDetails from "../Pages/Dashboard/Student/MyEnrolledClassDetails";
 import MyClasses from "../pages/Dashboard/Teacher/MyClass";
+import ErrorPage from "../Pages/ErrorPage";
 
 const stripePromise = loadStripe("pk_test_51Rm3ScQZQai0rO82528C1QcnbC7n1PUdkiZP2qotPdfRQRNWKPZSPP36tZ6NEB6eyqi2pbLHxmw7EJZSIC0BIQWS00HnTTXDCt");
 
@@ -53,6 +54,7 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
+     errorElement: <ErrorPage />, 
     children: [
       { index: true, element: <Home /> },
     ],
