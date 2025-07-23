@@ -4,6 +4,9 @@ import { useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import { toast } from "react-toastify";
+
+
 
 const AddClass = () => {
   const { user } = useAuth();
@@ -30,11 +33,11 @@ const AddClass = () => {
     },
     onSuccess: (result) => {
       if (result.insertedId) {
-        alert("✅ Class added successfully!");
+      toast.success("Class added successfully!");
         reset();
         navigate("/dashboard/teacher/my-class");
       } else {
-        alert("⚠️ Something went wrong. Class not added.");
+         toast.error("⚠️ Something went wrong. Class not added.");
       }
     },
     onError: (err) => {

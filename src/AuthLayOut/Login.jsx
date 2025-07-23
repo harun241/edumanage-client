@@ -7,6 +7,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -19,12 +20,15 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     setError("");
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
+       toast.success(" Login successful!");
       navigate("/");
     } catch (err) {
+       toast.error( err.message);
       setError(err.message);
     }
   };
@@ -33,6 +37,7 @@ const Login = () => {
     setError("");
     try {
       await signInWithPopup(auth, googleProvider);
+      toast.success("Google Login successful!");
       navigate("/");
     } catch (err) {
       setError(err.message);
