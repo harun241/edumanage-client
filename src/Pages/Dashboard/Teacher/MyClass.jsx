@@ -14,6 +14,7 @@ const MyClass = () => {
 
   useEffect(() => {
     if (user?.email) {
+      setLoading(true);
       fetch(`${BACKEND}/classes?email=${user.email}`, {
         headers: {
           "x-user-email": user.email,
@@ -32,7 +33,84 @@ const MyClass = () => {
     }
   }, [user]);
 
-  // handleDelete & handleUpdate functions ...
+  const handleDelete = async (id) => {
+    const confirmed = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (confirmed.isConfirmed) {
+      try {
+        const res = await fetch(`${BACKEND}/classes/${id}`, {
+          method: "DELETE",
+          headers: {
+            "x-user-email": user.email,
+            "x-user-role": user.role || "teacher",
+          },
+        });
+        if (res.ok) {
+          Swal.fire("Deleted!", "Your class has been deleted.", "success");
+          setClasses((prev) => prev.filter((cls) => cls._id !== id));
+          if (selectedClass?._id === id) setSelectedClass(null);
+        } else {
+          const data = await res.json();
+          Swal.fire("Error", data.error || "Failed to delete", "error");
+        }
+      } catch (error) {
+        console.error("Delete error:", error);
+        Swal.fire("Error", "Failed to delete class", "error");
+      }
+    }
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+
+    if (!selectedClass) return;
+
+    const updatedData = {
+      title: selectedClass.title,
+      description: selectedClass.description,
+      image: selectedClass.image,
+      price: parseFloat(selectedClass.price),
+      availableSeats: parseInt(selectedClass.availableSeats) || 0,
+      email: user?.email, // send for backend authorization
+    };
+
+    try {
+      const res = await fetch(`${BACKEND}/classes/${selectedClass._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-user-email": user?.email,
+          "x-user-role": user?.role,
+        },
+        body: JSON.stringify(updatedData),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.modifiedCount > 0) {
+        Swal.fire("Success", "Class updated successfully!", "success");
+        setSelectedClass(null);
+        setClasses((prev) =>
+          prev.map((cls) =>
+            cls._id === selectedClass._id ? { ...cls, ...updatedData } : cls
+          )
+        );
+      } else {
+        Swal.fire("Error", data.error || "Failed to update class", "error");
+      }
+    } catch (error) {
+      console.error("Update error:", error);
+      Swal.fire("Error", "An error occurred while updating the class.", "error");
+    }
+  };
 
   if (loading) {
     return (
@@ -81,6 +159,7 @@ const MyClass = () => {
                 <p className="mb-1">
                   <span className="font-semibold">Price:</span> ${cls.price}
                 </p>
+              
                 <p className="mb-2">{cls.description}</p>
                 <p>
                   Status:{" "}
@@ -112,7 +191,9 @@ const MyClass = () => {
                   </button>
                   <button
                     disabled={cls.status !== "approved"}
-                    onClick={() => navigate(`/dashboard/teacher/my-classes/${cls._id}`)}
+                    onClick={() =>
+                      navigate(`/dashboard/teacher/my-classes/${cls._id}`)
+                    }
                     className={`px-3 py-1 flex-1 text-white rounded transition-colors duration-300 ${
                       cls.status === "approved"
                         ? "bg-green-600 hover:bg-green-700"
@@ -131,12 +212,14 @@ const MyClass = () => {
       {/* Update Modal */}
       {selectedClass && (
         <div className="fixed inset-0 bg-black bg-opacity-60 dark:bg-opacity-80 flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-md mx-auto transition-colors duration-300">
+          <form
+            onSubmit={handleUpdate}
+            className="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-md mx-auto transition-colors duration-300"
+          >
             <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100 transition-colors duration-300">
               Update Class
             </h2>
-            {/* inputs with responsive full width and padding */}
-            {/* ... inputs same as your original code ... */}
+
             <input
               className="w-full mb-2 p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300"
               value={selectedClass.title}
@@ -144,24 +227,73 @@ const MyClass = () => {
                 setSelectedClass({ ...selectedClass, title: e.target.value })
               }
               placeholder="Class Title"
+              required
             />
-            {/* ... other inputs ... */}
 
-            <div className="flex flex-col sm:flex-row justify-end gap-2">
+            <input
+              className="w-full mb-2 p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300"
+              value={selectedClass.image || ""}
+              onChange={(e) =>
+                setSelectedClass({ ...selectedClass, image: e.target.value })
+              }
+              placeholder="Image URL"
+              required
+            />
+
+            <input
+              type="number"
+              min="0"
+              className="w-full mb-2 p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300"
+              value={selectedClass.price || ""}
+              onChange={(e) =>
+                setSelectedClass({ ...selectedClass, price: e.target.value })
+              }
+              placeholder="Price"
+              required
+            />
+
+            <input
+              type="number"
+              min="0"
+              className="w-full mb-2 p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300"
+              value={selectedClass.availableSeats || 0}
+              onChange={(e) =>
+                setSelectedClass({
+                  ...selectedClass,
+                  availableSeats: e.target.value,
+                })
+              }
+              placeholder="Available Seats"
+              required
+            />
+
+            <textarea
+              rows={3}
+              className="w-full mb-2 p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300 resize-none"
+              value={selectedClass.description || ""}
+              onChange={(e) =>
+                setSelectedClass({ ...selectedClass, description: e.target.value })
+              }
+              placeholder="Description"
+              required
+            />
+
+            <div className="flex flex-col sm:flex-row justify-end gap-2 mt-4">
               <button
+                type="button"
                 onClick={() => setSelectedClass(null)}
                 className="px-3 py-1 bg-gray-400 hover:bg-gray-500 text-white rounded transition-colors duration-300"
               >
                 Cancel
               </button>
               <button
-                onClick={handleUpdate}
+                type="submit"
                 className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors duration-300"
               >
                 Save
               </button>
             </div>
-          </div>
+          </form>
         </div>
       )}
     </div>
