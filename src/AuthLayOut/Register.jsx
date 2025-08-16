@@ -104,7 +104,7 @@ const Register = () => {
 
        
 
-        <button type="submit" className="btn btn-primary w-full">
+        <button type="submit " className="btn bg-sky-400 hover:bg-sky-700 w-full">
           Register
         </button>
       </form>

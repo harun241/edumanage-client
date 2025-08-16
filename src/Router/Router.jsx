@@ -22,7 +22,7 @@ import PrivateRoute from "../components/PrivateRoute";
 import RoleBasedDashboard from "../components/RoleBasedDashboard";
 
 // Admin Pages
-import AllClasses from "../pages/Dashboard/Admin/AllClasses";
+
 import Users from "../pages/Dashboard/Admin/Users";
 import TeacherRequest from "../pages/Dashboard/Admin/TeacherRequest";
 import AdminProfile from "../pages/Dashboard/Admin/AdminProfile";
@@ -46,6 +46,8 @@ import Payment from "../components/Payment";
 import MyEnrolledClassDetails from "../Pages/Dashboard/Student/MyEnrolledClassDetails";
 import MyClasses from "../pages/Dashboard/Teacher/MyClass";
 import ErrorPage from "../Pages/ErrorPage";
+import ClassRecord from "../Pages/Dashboard/Admin/ClassRecord";
+import AllClasses from "../Pages/Dashboard/Admin/AllClasses";
 
 const stripePromise = loadStripe("pk_test_51Rm3ScQZQai0rO82528C1QcnbC7n1PUdkiZP2qotPdfRQRNWKPZSPP36tZ6NEB6eyqi2pbLHxmw7EJZSIC0BIQWS00HnTTXDCt");
 
@@ -99,8 +101,8 @@ export const router = createBrowserRouter([
         path: "admin",
         element: <AdminDashboardLayout />,
         children: [
-          { index: true, element: <AllClasses /> },
-          { path: "all-classes", element: <AllClasses /> },
+          { index: true, element: <ClassRecord/>},
+          { path: "all-classes", element:<ClassRecord/>  },
           { path: "users", element: <Users /> },
           { path: "teacher-requests", element: <TeacherRequest /> },
           { path: "profile", element: <AdminProfile /> },

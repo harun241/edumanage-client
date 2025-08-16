@@ -133,7 +133,7 @@ const AddClass = () => {
         {/* Submit */}
         <button
           type="submit"
-          className={`w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded transition ${
+          className={`w-full bg-sky-400 hover:bg-sky-700 text-white font-semibold py-3 rounded transition ${
             isPending ? "opacity-50 cursor-not-allowed" : ""
           }`}
           disabled={isPending}

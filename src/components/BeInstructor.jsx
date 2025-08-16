@@ -19,7 +19,7 @@ const BeInstructor = () => {
             It is the best E-Learning platform to learn online courses from the top instructors.
           </p>
           <Link to={'/dashboard/student/teach'}>
-            <button className="inline-block px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors duration-300">
+            <button className="inline-block px-4 py-2 bg-sky-400 hover:bg-sky-700 text-white rounded transition-colors duration-300">
               Start Teaching Today
             </button>
           </Link>
