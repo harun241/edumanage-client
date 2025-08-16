@@ -39,8 +39,8 @@ const EduManage = () => (
 
     {/* Brand Name */}
     <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
-      <span className="text-indigo-600">Edu</span>
-      <span className="text-emerald-500">Manage</span>
+ <span className="text-blue-600">Edu</span>
+<span className="text-orange-500">Manage</span>
     </h1>
   </div>
 );
