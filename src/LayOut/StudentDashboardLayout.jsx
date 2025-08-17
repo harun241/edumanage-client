@@ -1,6 +1,8 @@
 import React from 'react';
-import StudentSidebar from '../components/StudentSidebar';  
 import { Outlet } from 'react-router-dom';
+import Chart from '../components/Chart';
+import DashboardOveriew from '../components/DashboardOverview';
+
 
 const StudentDashboardLayout = () => {
   return (
@@ -8,7 +10,9 @@ const StudentDashboardLayout = () => {
    
 
       <main className="flex-grow p-6 bg-white">
-        
+      <div className='flex items-baseline'>  <Chart></Chart>
+   <DashboardOveriew></DashboardOveriew>
+        </div>
         <Outlet />
       </main>
     </div>

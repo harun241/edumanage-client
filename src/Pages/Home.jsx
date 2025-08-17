@@ -9,6 +9,8 @@ import PopularClasses from '../components/PopularClasses';
 import Footer from '../components/Footer/Footer';
 import TopInstructor from '../components/TopInstructor';
 import StudentStories from '../components/StudentStories';
+import BlogSection from '../components/Blogs';
+import FAQSection from '../components/FAQ';
 
 const Home = () => {
     return (
@@ -21,6 +23,8 @@ const Home = () => {
             <TopInstructor></TopInstructor>
             <Partners></Partners>
             <StudentStories></StudentStories>
+            <BlogSection></BlogSection>
+            <FAQSection></FAQSection>
            <Feedbacks></Feedbacks>
            <Footer></Footer>
            

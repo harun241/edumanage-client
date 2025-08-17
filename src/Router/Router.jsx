@@ -48,6 +48,7 @@ import MyClasses from "../pages/Dashboard/Teacher/MyClass";
 import ErrorPage from "../Pages/ErrorPage";
 import ClassRecord from "../Pages/Dashboard/Admin/ClassRecord";
 import AllClasses from "../Pages/Dashboard/Admin/AllClasses";
+import Chart from "../components/Chart";
 
 const stripePromise = loadStripe("pk_test_51Rm3ScQZQai0rO82528C1QcnbC7n1PUdkiZP2qotPdfRQRNWKPZSPP36tZ6NEB6eyqi2pbLHxmw7EJZSIC0BIQWS00HnTTXDCt");
 
@@ -106,6 +107,7 @@ export const router = createBrowserRouter([
           { path: "users", element: <Users /> },
           { path: "teacher-requests", element: <TeacherRequest /> },
           { path: "profile", element: <AdminProfile /> },
+          { path: "chart", element: <Chart /> },
         ],
       },
 
@@ -120,6 +122,7 @@ export const router = createBrowserRouter([
           { path: "my-classes/:id", element: <TeacherClassDetails /> },
           { path: "profile", element: <TeacherProfile /> },
           { path: "teach", element: <TeacherRequestForm /> },
+          { path: "chart", element: <Chart /> },
         ],
       },
 
@@ -133,6 +136,7 @@ export const router = createBrowserRouter([
           { path: "my-classes/:id", element: <MyEnrolledClassDetails /> },
           { path: "orders", element: <Orders /> },
           { path: "profile", element: <StudentProfile /> },
+          { path: "chart", element: <Chart /> },
 
           // Payment route with Stripe Elements and PrivateRoute
           {

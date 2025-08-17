@@ -93,7 +93,7 @@ const Navbar = () => {
             {!user ? (
               <Link
                 to="/auth/login"
-                className="px-4 py-2 bg-sky-400 hover:bg-sky-700 text-white rounded  transition"
+                className="px-4 py-2 bg-green-500 text-white rounded  transition"
               >
                 Sign In
               </Link>
