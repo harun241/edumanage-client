@@ -102,6 +102,7 @@ const Contact = () => {
           </form>
         </div>
       </section>
+      
 
       {/* Toast Container */}
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
