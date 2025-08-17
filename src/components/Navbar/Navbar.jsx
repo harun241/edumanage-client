@@ -38,17 +38,16 @@ const Navbar = () => {
   const inactiveStyle =
     "border-transparent hover:border-gray-300 hover:translate-x-1";
 
-const userNavItems = [
-  { to: "/", label: "Home" },
-  { to: "/all-classes", label: "All Classes" },
-  ...(user?.role === "student"
-    ? [{ to: "/dashboard/student/teach", label: "Teach on EduManage" }]
-    : []),
-  { to: getDashboardPath(), label: "Dashboard" },
-  { to: "/auth/about", label: "About" },   // router অনুযায়ী path
-  { to: "/auth/contact", label: "Contact" }, // router অনুযায়ী path
-];
-
+  const userNavItems = [
+    { to: "/", label: "Home" },
+    { to: "/all-classes", label: "All Classes" },
+    ...(user?.role === "student"
+      ? [{ to: "/dashboard/student/teach", label: "Teach on EduManage" }]
+      : []),
+    ...(user ? [{ to: getDashboardPath(), label: "Dashboard" }] : []),
+    { to: "/auth/about", label: "About" },
+    { to: "/auth/contact", label: "Contact" },
+  ];
 
   const adminNavItems = [
     { to: "/dashboard/admin/all-classes", label: "All Classes (Admin)" },
@@ -61,9 +60,9 @@ const userNavItems = [
         <NavLink
           to={to}
           className={({ isActive }) =>
-            `${baseLinkStyle} ${
-              isMobile ? "text-black" : "text-white"
-            } ${isActive ? activeStyle : inactiveStyle}`
+            `${baseLinkStyle} ${isMobile ? "text-black" : "text-white"} ${
+              isActive ? activeStyle : inactiveStyle
+            }`
           }
           onClick={() => setMobileMenuOpen(false)}
         >
@@ -92,13 +91,13 @@ const userNavItems = [
 
           {/* Right - Auth/Profile */}
           <div
-            className="flex items-center space-x-4 relative"
+            className=" items-center space-x-4 relative flex justify-center mt-2"
             ref={profileRef}
           >
             {!user ? (
               <Link
                 to="/auth/login"
-                className="px-4 py-2 bg-green-500 text-white rounded  transition"
+                className="px-4 py-2 bg-green-500 text-white rounded font-semibold hover:bg-green-600 transition"
               >
                 Sign In
               </Link>
@@ -149,8 +148,7 @@ const userNavItems = [
                         <strong>Email:</strong> {user.email}
                       </p>
                       <p>
-                        <strong>Phone:</strong>{" "}
-                        {user.phone || "+880123456789"}
+                        <strong>Phone:</strong> {user.phone || "+880123456789"}
                       </p>
                     </div>
 
@@ -234,6 +232,9 @@ const userNavItems = [
           {user?.role === "admin"
             ? renderLinks(adminNavItems, true)
             : renderLinks(userNavItems, true)}
+
+          
+     
         </ul>
       </div>
     </nav>
