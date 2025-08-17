@@ -22,8 +22,9 @@ const Home = () => {
             <PopularClasses></PopularClasses>
             <TopInstructor></TopInstructor>
             <Partners></Partners>
-            <StudentStories></StudentStories>
+           
             <BlogSection></BlogSection>
+             <StudentStories></StudentStories>
             <FAQSection></FAQSection>
            <Feedbacks></Feedbacks>
            <Footer></Footer>

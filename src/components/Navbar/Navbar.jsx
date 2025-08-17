@@ -55,15 +55,15 @@ const Navbar = () => {
   const renderLinks = (items) =>
     items.map(({ to, label }) => (
       <li key={to}>
-        <NavLink
-          to={to}
-          className={({ isActive }) =>
-            `${baseLinkStyle} ${isActive ? activeStyle : inactiveStyle}`
-          }
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          {label}
-        </NavLink>
+       <NavLink
+  to={to}
+  className={({ isActive }) =>
+    `${baseLinkStyle} text-white ${isActive ? activeStyle : inactiveStyle}`
+  }
+  onClick={() => setMobileMenuOpen(false)}
+>
+  {label}
+</NavLink>
       </li>
     ));
 
