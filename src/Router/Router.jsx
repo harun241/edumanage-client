@@ -49,6 +49,8 @@ import ErrorPage from "../Pages/ErrorPage";
 import ClassRecord from "../Pages/Dashboard/Admin/ClassRecord";
 import AllClasses from "../Pages/Dashboard/Admin/AllClasses";
 import Chart from "../components/Chart";
+import About from "../components/About";
+import Contact from "../components/Contact";
 
 const stripePromise = loadStripe("pk_test_51Rm3ScQZQai0rO82528C1QcnbC7n1PUdkiZP2qotPdfRQRNWKPZSPP36tZ6NEB6eyqi2pbLHxmw7EJZSIC0BIQWS00HnTTXDCt");
 
@@ -62,15 +64,16 @@ export const router = createBrowserRouter([
       { index: true, element: <Home /> },
     ],
   },
-  {
-    path: "/auth",
-    element: <AuthLayout />,
-    children: [
-      { path: "login", element: <Login /> },
-      { path: "register", element: <Register /> },
-    ],
-  },
-
+ {
+  path: "/auth",
+  element: <AuthLayout />,
+  children: [
+    { path: "login", element: <Login /> },
+    { path: "register", element: <Register /> },
+    { path: "about", element: <About /> },   // About page
+    { path: "contact", element: <Contact /> }, // Contact page
+  ],
+},
   // Classes listing & details (partial private)
   {
     path: "/all-classes",

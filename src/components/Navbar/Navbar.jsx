@@ -34,36 +34,41 @@ const Navbar = () => {
 
   const baseLinkStyle =
     "block w-full border-b-2 pb-2 px-2 transition-all duration-300 transform";
-  const activeStyle = "text-blue-500 font-semibold border-blue-400";
+  const activeStyle = "font-semibold border-blue-400";
   const inactiveStyle =
-    "border-transparent hover:border-gray-300 hover:translate-x-1 text-gray-700 dark:text-gray-100";
+    "border-transparent hover:border-gray-300 hover:translate-x-1";
 
-  const userNavItems = [
-    { to: "/", label: "Home" },
-    { to: "/all-classes", label: "All Classes" },
-    ...(user?.role === "student"
-      ? [{ to: "/dashboard/student/teach", label: "Teach on EduManage" }]
-      : []),
-    { to: getDashboardPath(), label: "Dashboard" },
-  ];
+const userNavItems = [
+  { to: "/", label: "Home" },
+  { to: "/all-classes", label: "All Classes" },
+  ...(user?.role === "student"
+    ? [{ to: "/dashboard/student/teach", label: "Teach on EduManage" }]
+    : []),
+  { to: getDashboardPath(), label: "Dashboard" },
+  { to: "/auth/about", label: "About" },   // router অনুযায়ী path
+  { to: "/auth/contact", label: "Contact" }, // router অনুযায়ী path
+];
+
 
   const adminNavItems = [
     { to: "/dashboard/admin/all-classes", label: "All Classes (Admin)" },
     { to: "/dashboard/admin", label: "Dashboard" },
   ];
 
-  const renderLinks = (items) =>
+  const renderLinks = (items, isMobile = false) =>
     items.map(({ to, label }) => (
       <li key={to}>
-       <NavLink
-  to={to}
-  className={({ isActive }) =>
-    `${baseLinkStyle} text-white ${isActive ? activeStyle : inactiveStyle}`
-  }
-  onClick={() => setMobileMenuOpen(false)}
->
-  {label}
-</NavLink>
+        <NavLink
+          to={to}
+          className={({ isActive }) =>
+            `${baseLinkStyle} ${
+              isMobile ? "text-black" : "text-white"
+            } ${isActive ? activeStyle : inactiveStyle}`
+          }
+          onClick={() => setMobileMenuOpen(false)}
+        >
+          {label}
+        </NavLink>
       </li>
     ));
 
@@ -81,8 +86,8 @@ const Navbar = () => {
           {/* Desktop Menu */}
           <ul className="hidden md:flex space-x-8 list-none">
             {user?.role === "admin"
-              ? renderLinks(adminNavItems)
-              : renderLinks(userNavItems)}
+              ? renderLinks(adminNavItems, false)
+              : renderLinks(userNavItems, false)}
           </ul>
 
           {/* Right - Auth/Profile */}
@@ -227,8 +232,8 @@ const Navbar = () => {
       >
         <ul className="space-y-2 list-none">
           {user?.role === "admin"
-            ? renderLinks(adminNavItems)
-            : renderLinks(userNavItems)}
+            ? renderLinks(adminNavItems, true)
+            : renderLinks(userNavItems, true)}
         </ul>
       </div>
     </nav>
