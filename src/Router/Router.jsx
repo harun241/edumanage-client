@@ -1,6 +1,6 @@
 // src/router/router.jsx
 import React from "react";
-import { createBrowserRouter, Outlet } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
@@ -22,10 +22,11 @@ import PrivateRoute from "../components/PrivateRoute";
 import RoleBasedDashboard from "../components/RoleBasedDashboard";
 
 // Admin Pages
-
 import Users from "../pages/Dashboard/Admin/Users";
 import TeacherRequest from "../pages/Dashboard/Admin/TeacherRequest";
 import AdminProfile from "../pages/Dashboard/Admin/AdminProfile";
+import ClassRecord from "../Pages/Dashboard/Admin/ClassRecord";
+import AllClasses from "../Pages/Dashboard/Admin/AllClasses";
 
 // Teacher Pages
 import MyClass from "../pages/Dashboard/Teacher/MyClass";
@@ -36,21 +37,17 @@ import TeacherRequestForm from "../pages/Dashboard/Teacher/TeacherRequestForm";
 
 // Student Pages
 import MyEnrolledClasses from "../pages/Dashboard/Student/MyEnrolledClasses";
-import EnrolledClassDetails from "../Pages/Dashboard/Student/MyEnrolledClassDetails";
+import MyEnrolledClassDetails from "../Pages/Dashboard/Student/MyEnrolledClassDetails";
 import Orders from "../pages/Dashboard/Student/Orders";
 import StudentProfile from "../pages/Dashboard/Student/StudentProfile";
 
 // Other Pages
 import ClassDetails from "../pages/ClassDetails";
 import Payment from "../components/Payment";
-import MyEnrolledClassDetails from "../Pages/Dashboard/Student/MyEnrolledClassDetails";
-import MyClasses from "../pages/Dashboard/Teacher/MyClass";
-import ErrorPage from "../Pages/ErrorPage";
-import ClassRecord from "../Pages/Dashboard/Admin/ClassRecord";
-import AllClasses from "../Pages/Dashboard/Admin/AllClasses";
 import Chart from "../components/Chart";
 import About from "../components/About";
 import Contact from "../components/Contact";
+import ErrorPage from "../Pages/ErrorPage";
 
 const stripePromise = loadStripe("pk_test_51Rm3ScQZQai0rO82528C1QcnbC7n1PUdkiZP2qotPdfRQRNWKPZSPP36tZ6NEB6eyqi2pbLHxmw7EJZSIC0BIQWS00HnTTXDCt");
 
@@ -59,27 +56,30 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
-     errorElement: <ErrorPage />, 
+    errorElement: <ErrorPage />,
     children: [
       { index: true, element: <Home /> },
+      { path: "about", element: <About /> },
+      { path: "contact", element: <Contact /> },
     ],
   },
- {
-  path: "/auth",
-  element: <AuthLayout />,
-  children: [
-    { path: "login", element: <Login /> },
-    { path: "register", element: <Register /> },
-    { path: "about", element: <About /> },   // About page
-    { path: "contact", element: <Contact /> }, // Contact page
-  ],
-},
-  // Classes listing & details (partial private)
+
+  // Auth Pages
+  {
+    path: "/auth",
+    element: <AuthLayout />,
+    children: [
+      { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> },
+    ],
+  },
+
+  // Classes listing & details
   {
     path: "/all-classes",
     element: <AllClassesLayout />,
     children: [
-      { index: true, element: <AllClasses /> }, // public list page
+      { index: true, element: <AllClasses /> },
       {
         path: "class/:id",
         element: (
@@ -91,7 +91,7 @@ export const router = createBrowserRouter([
     ],
   },
 
-  // Dashboard - fully protected, role based
+  // Dashboard - Protected
   {
     path: "/dashboard",
     element: (
@@ -100,36 +100,34 @@ export const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
-      // Admin Dashboard routes
+      // Admin
       {
         path: "admin",
         element: <AdminDashboardLayout />,
         children: [
-          { index: true, element: <ClassRecord/>},
-          { path: "all-classes", element:<ClassRecord/>  },
+          { index: true, element: <ClassRecord /> },
+          { path: "all-classes", element: <ClassRecord /> },
           { path: "users", element: <Users /> },
           { path: "teacher-requests", element: <TeacherRequest /> },
           { path: "profile", element: <AdminProfile /> },
           { path: "chart", element: <Chart /> },
         ],
       },
-
-      // Teacher Dashboard routes
+      // Teacher
       {
         path: "teacher",
         element: <TeacherDashboardLayout />,
         children: [
           { index: true, element: <MyClass /> },
           { path: "add-class", element: <AddClass /> },
-          { path: "my-class", element: <MyClasses /> },
+          { path: "my-class", element: <MyClass /> },
           { path: "my-classes/:id", element: <TeacherClassDetails /> },
           { path: "profile", element: <TeacherProfile /> },
           { path: "teach", element: <TeacherRequestForm /> },
           { path: "chart", element: <Chart /> },
         ],
       },
-
-      // Student Dashboard routes
+      // Student
       {
         path: "student",
         element: <StudentDashboardLayout />,
@@ -140,8 +138,6 @@ export const router = createBrowserRouter([
           { path: "orders", element: <Orders /> },
           { path: "profile", element: <StudentProfile /> },
           { path: "chart", element: <Chart /> },
-
-          // Payment route with Stripe Elements and PrivateRoute
           {
             path: "payment/:id",
             element: (
@@ -152,8 +148,7 @@ export const router = createBrowserRouter([
               </Elements>
             ),
           },
-
-            {
+          {
             path: "teach",
             element: (
               <PrivateRoute>

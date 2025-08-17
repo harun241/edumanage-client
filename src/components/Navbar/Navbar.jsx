@@ -45,8 +45,8 @@ const Navbar = () => {
       ? [{ to: "/dashboard/student/teach", label: "Teach on EduManage" }]
       : []),
     ...(user ? [{ to: getDashboardPath(), label: "Dashboard" }] : []),
-    { to: "/auth/about", label: "About" },
-    { to: "/auth/contact", label: "Contact" },
+    { to: "/about", label: "About" },
+    { to: "/contact", label: "Contact" },
   ];
 
   const adminNavItems = [

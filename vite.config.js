@@ -5,8 +5,4 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  server: {
-    // Enable SPA fallback so browser refreshes work on client routes
-    historyApiFallback: true,
-  },
 })

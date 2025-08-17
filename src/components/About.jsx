@@ -1,5 +1,7 @@
 // src/pages/About.jsx
 import React from "react";
+import { Link } from "react-router";
+
 
 const About = () => {
   return (
@@ -18,13 +20,10 @@ const About = () => {
 
       {/* About Content */}
       <section className="py-16 px-4 max-w-7xl mx-auto">
-        <h2 className="text-3xl font-semibold mb-6 text-center">
-          Who We Are
-        </h2>
+        <h2 className="text-3xl font-semibold mb-6 text-center">Who We Are</h2>
         <p className="text-gray-700 dark:text-gray-300 max-w-4xl mx-auto text-center mb-6">
           EduManage is designed to simplify education management for students, teachers, and admins. Our platform offers class management, enrollment tracking, real-time dashboards, and intuitive interfaces to help educators and learners thrive in a seamless digital environment.
         </p>
-
         <p className="text-gray-700 dark:text-gray-300 max-w-4xl mx-auto text-center">
           Whether you are a student looking to enroll in new courses, a teacher managing your classes, or an admin overseeing the platform, EduManage provides all the tools you need in one centralized hub.
         </p>
@@ -36,7 +35,7 @@ const About = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {[
             { name: "Harun", role: "Full Stack Developer" },
-            { name: "Iffat ", role: "UI/UX Designer" },
+            { name: "Iffat", role: "UI/UX Designer" },
             { name: "Zarin", role: "Backend Developer" },
             { name: "Sadia", role: "Frontend Developer" },
           ].map((member, idx) => (
@@ -60,12 +59,12 @@ const About = () => {
         <p className="mb-6 max-w-2xl mx-auto">
           Sign up to explore classes, manage your courses, and be part of our growing education community.
         </p>
-        <a
-          href="/auth/register"
+        <Link
+          to="/auth/register" // ✅ Use Link instead of <a>
           className="px-6 py-3 bg-white text-blue-500 font-semibold rounded-lg shadow hover:bg-gray-100 transition"
         >
           Get Started
-        </a>
+        </Link>
       </section>
     </div>
   );
