@@ -1,12 +1,32 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+---
 
-Currently, two official plugins are available:
+## **2️⃣ `edumanage-client/README.md`**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```markdown
+# EduManage Client
 
-## Expanding the ESLint configuration
+This is the frontend of **EduManage**, built with **React**, **Tailwind CSS**, and **React Router**. It connects with the backend to manage classes, assignments, and user interactions.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Features
+- User authentication (Admin, Teacher, Student)
+- Role-based dashboards
+- Class enrollment and assignment submission
+- Feedback and review system
+- Responsive design with Tailwind CSS
+- Modals, sliders, and interactive UI
+
+## Tech Stack
+- React.js
+- Tailwind CSS
+- React Router DOM
+- Axios for API requests
+- React Query (optional) for data fetching
+- React Icons for UI icons
+
+## Setup & Installation
+
+1. Clone the repository:
+```bash
+git clone <client-repo-url>
+cd edumanage-client
