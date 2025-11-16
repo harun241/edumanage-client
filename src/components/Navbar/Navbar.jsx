@@ -60,7 +60,7 @@ const Navbar = () => {
         <NavLink
           to={to}
           className={({ isActive }) =>
-            `${baseLinkStyle} ${isMobile ? "text-black" : "text-white"} ${
+            `${baseLinkStyle} ${isMobile ? "text-black" : ""} ${
               isActive ? activeStyle : inactiveStyle
             }`
           }
@@ -72,7 +72,7 @@ const Navbar = () => {
     ));
 
   return (
-    <nav className="w-full bg-white dark:bg-gray-900 shadow-sm fixed top-0 left-0 z-50 transition-colors">
+    <nav className="w-full bg-white  dark:bg-gray-800 shadow-sm fixed top-0 left-0 z-50 transition-colors">
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
@@ -97,7 +97,7 @@ const Navbar = () => {
             {!user ? (
               <Link
                 to="/auth/login"
-                className="px-4 py-2 bg-green-500 text-white rounded font-semibold hover:bg-green-600 transition"
+                className="px-4 py-2 bg-green-500  rounded font-semibold hover:bg-green-600 transition"
               >
                 Sign In
               </Link>
@@ -126,7 +126,7 @@ const Navbar = () => {
                     w-72 right-0 mt-2
                   `}
                 >
-                  <div className="px-4 py-4 space-y-3 text-gray-700 dark:text-gray-100">
+                  <div className="px-4 py-4 space-y-3 ">
                     <div className="flex items-center space-x-4 border-b border-gray-200 dark:border-gray-600 pb-3">
                       <img
                         src={user.photoURL || "/default-avatar.png"}
@@ -137,7 +137,7 @@ const Navbar = () => {
                         <p className="font-semibold text-lg">
                           {user.displayName || "No Name"}
                         </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 capitalize">
+                        <p className="text-sm  capitalize">
                           {user.role || "student"}
                         </p>
                       </div>
@@ -189,7 +189,7 @@ const Navbar = () => {
                   return !prev;
                 });
               }}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 dark:text-gray-200 hover:text-blue-600 focus:outline-none"
+              className="inline-flex items-center justify-center p-2 rounded-md  hover:text-blue-600 focus:outline-none"
               aria-label="Toggle menu"
             >
               <svg
