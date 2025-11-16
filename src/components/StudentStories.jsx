@@ -1,4 +1,5 @@
-import React from 'react';
+import React from "react";
+import Tilt from "react-parallax-tilt";
 
 const stories = [
   {
@@ -35,31 +36,48 @@ const stories = [
 
 const StudentStories = () => {
   return (
-    <section className="py-16 bg-white dark:bg-gray-900 transition-colors duration-300">
+    <section className="py-20">
       <div className="max-w-screen-xl mx-auto px-4 text-center">
-        <h2 className="text-3xl font-bold mb-10 text-gray-900 dark:text-white">
-          Student Success Stories
+        <h2 className="text-4xl font-extrabold mb-12 text-gray-900 dark:text-white tracking-wide">
+          🌟 Student Success Stories
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {stories.map((student, i) => (
-            <div
+            <Tilt
               key={i}
-              className="flex items-start space-x-4 text-left bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-sm hover:shadow-md transition"
+              tiltMaxAngleX={10}
+              tiltMaxAngleY={10}
+              scale={1.03}
+              glareEnable={true}
+              glareMaxOpacity={0.2}
+              glareColor="white"
+              glarePosition="all"
             >
-              <img
-                src={student.photo}
-                alt={student.name}
-                className="w-16 h-16 rounded-full object-cover border border-gray-300 dark:border-gray-700"
-              />
-              <div>
-                <h4 className="text-lg font-semibold text-gray-800 dark:text-white">
-                  {student.name}
-                </h4>
-                <p className="text-gray-600 dark:text-gray-300 mt-1">
+              <div className="
+                p-6 rounded-2xl
+                backdrop-blur-lg bg-white/10 dark:bg-gray-800/30
+                border border-white/20 dark:border-gray-700/20
+                shadow-xl hover:shadow-blue-400/30
+                transition-all duration-500
+                hover:-translate-y-2
+                flex flex-col items-start
+              ">
+                <div className="flex items-center space-x-4 mb-4">
+                  <img
+                    src={student.photo}
+                    alt={student.name}
+                    className="w-16 h-16 rounded-full object-cover border-2 border-gray-300 dark:border-gray-700"
+                  />
+                  <h4 className="text-lg font-semibold text-gray-800 dark:text-white">
+                    {student.name}
+                  </h4>
+                </div>
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                   {student.story}
                 </p>
               </div>
-            </div>
+            </Tilt>
           ))}
         </div>
       </div>

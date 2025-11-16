@@ -8,7 +8,8 @@ import image3 from "../assets/eduimag3.JPG";
 
 const Banner = () => {
   return (
-    <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen mt-20">
+    <div className="max-w-7xl mx-auto relative rounded-[40px] w-screen mt-20 overflow-hidden">
+
       <Carousel
         autoPlay
         infiniteLoop

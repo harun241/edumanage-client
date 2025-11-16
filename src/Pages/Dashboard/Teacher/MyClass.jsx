@@ -1,3 +1,4 @@
+// src/pages/Dashboard/Teacher/MyClass.jsx
 import React, { useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -79,7 +80,7 @@ const MyClass = () => {
       image: selectedClass.image,
       price: parseFloat(selectedClass.price),
       availableSeats: parseInt(selectedClass.availableSeats) || 0,
-      email: user?.email, // send for backend authorization
+      email: user?.email,
     };
 
     try {
@@ -121,8 +122,8 @@ const MyClass = () => {
   }
 
   return (
-    <div className="p-4 sm:p-6 bg-white dark:bg-gray-900 min-h-screen transition-colors duration-300">
-      <h2 className="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-gray-100 transition-colors duration-300">
+    <div className="p-4 sm:p-6 md:p-8 bg-white dark:bg-gray-900 min-h-screen transition-colors duration-300">
+      <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center text-gray-900 dark:text-gray-100 transition-colors duration-300">
         My Classes
       </h2>
       {classes.length === 0 ? (
@@ -130,7 +131,7 @@ const MyClass = () => {
           No classes found.
         </p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {classes.map((cls) => (
             <div
               key={cls._id}
@@ -149,24 +150,23 @@ const MyClass = () => {
               )}
 
               <div className="p-4 flex flex-col flex-grow text-gray-900 dark:text-gray-100 transition-colors duration-300">
-                <h3 className="text-xl font-semibold mb-1">{cls.title}</h3>
-                <p className="mb-1">
+                <h3 className="text-lg sm:text-xl font-semibold mb-1">{cls.title}</h3>
+                <p className="text-sm sm:text-base mb-1">
                   <span className="font-semibold">Teacher:</span> {user.name}
                 </p>
-                <p className="mb-1">
+                <p className="text-sm sm:text-base mb-1">
                   <span className="font-semibold">Email:</span> {user.email}
                 </p>
-                <p className="mb-1">
+                <p className="text-sm sm:text-base mb-1">
                   <span className="font-semibold">Price:</span> ${cls.price}
                 </p>
-              
-                <p className="mb-2">{cls.description}</p>
-                <p>
+                <p className="text-sm sm:text-base mb-2">{cls.description}</p>
+                <p className="text-sm sm:text-base">
                   Status:{" "}
                   <span
                     className={`font-medium ${
                       cls.status === "approved"
-                        ? "text-green-600 dark:text-green-400"
+                        ? "text-green-400 dark:text-green-400"
                         : cls.status === "rejected"
                         ? "text-red-500 dark:text-red-400"
                         : "text-yellow-600 dark:text-yellow-400"
@@ -179,13 +179,13 @@ const MyClass = () => {
                 <div className="mt-auto flex flex-col sm:flex-row gap-2 pt-4">
                   <button
                     onClick={() => setSelectedClass(cls)}
-                    className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded flex-1 transition-colors duration-300"
+                    className="px-3 py-2 sm:py-1 bg-sky-400 hover:bg-sky-700 text-white rounded flex-1 transition-colors duration-300 text-sm sm:text-base"
                   >
                     Update
                   </button>
                   <button
                     onClick={() => handleDelete(cls._id)}
-                    className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded flex-1 transition-colors duration-300"
+                    className="px-3 py-2 sm:py-1 bg-red-500 hover:bg-red-800 text-white rounded flex-1 transition-colors duration-300 text-sm sm:text-base"
                   >
                     Delete
                   </button>
@@ -194,9 +194,9 @@ const MyClass = () => {
                     onClick={() =>
                       navigate(`/dashboard/teacher/my-classes/${cls._id}`)
                     }
-                    className={`px-3 py-1 flex-1 text-white rounded transition-colors duration-300 ${
+                    className={`px-3 py-2 sm:py-1 flex-1 text-white rounded transition-colors duration-300 text-sm sm:text-base ${
                       cls.status === "approved"
-                        ? "bg-green-600 hover:bg-green-700"
+                        ? "bg-green-500 hover:bg-green-700"
                         : "bg-gray-400 cursor-not-allowed"
                     }`}
                   >
@@ -214,14 +214,14 @@ const MyClass = () => {
         <div className="fixed inset-0 bg-black bg-opacity-60 dark:bg-opacity-80 flex items-center justify-center z-50 p-4">
           <form
             onSubmit={handleUpdate}
-            className="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-md mx-auto transition-colors duration-300"
+            className="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl w-full max-w-md mx-auto transition-colors duration-300"
           >
-            <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+            <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-gray-900 dark:text-gray-100 transition-colors duration-300">
               Update Class
             </h2>
 
             <input
-              className="w-full mb-2 p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300"
+              className="w-full mb-3 sm:mb-4 p-2 sm:p-3 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm sm:text-base transition-colors duration-300"
               value={selectedClass.title}
               onChange={(e) =>
                 setSelectedClass({ ...selectedClass, title: e.target.value })
@@ -231,7 +231,7 @@ const MyClass = () => {
             />
 
             <input
-              className="w-full mb-2 p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300"
+              className="w-full mb-3 sm:mb-4 p-2 sm:p-3 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm sm:text-base transition-colors duration-300"
               value={selectedClass.image || ""}
               onChange={(e) =>
                 setSelectedClass({ ...selectedClass, image: e.target.value })
@@ -243,7 +243,7 @@ const MyClass = () => {
             <input
               type="number"
               min="0"
-              className="w-full mb-2 p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300"
+              className="w-full mb-3 sm:mb-4 p-2 sm:p-3 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm sm:text-base transition-colors duration-300"
               value={selectedClass.price || ""}
               onChange={(e) =>
                 setSelectedClass({ ...selectedClass, price: e.target.value })
@@ -255,7 +255,7 @@ const MyClass = () => {
             <input
               type="number"
               min="0"
-              className="w-full mb-2 p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300"
+              className="w-full mb-3 sm:mb-4 p-2 sm:p-3 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm sm:text-base transition-colors duration-300"
               value={selectedClass.availableSeats || 0}
               onChange={(e) =>
                 setSelectedClass({
@@ -269,7 +269,7 @@ const MyClass = () => {
 
             <textarea
               rows={3}
-              className="w-full mb-2 p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300 resize-none"
+              className="w-full mb-3 sm:mb-4 p-2 sm:p-3 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm sm:text-base transition-colors duration-300 resize-none"
               value={selectedClass.description || ""}
               onChange={(e) =>
                 setSelectedClass({ ...selectedClass, description: e.target.value })
@@ -282,13 +282,13 @@ const MyClass = () => {
               <button
                 type="button"
                 onClick={() => setSelectedClass(null)}
-                className="px-3 py-1 bg-gray-400 hover:bg-gray-500 text-white rounded transition-colors duration-300"
+                className="px-3 py-2 sm:py-1 bg-gray-400 hover:bg-gray-500 text-white rounded transition-colors duration-300 text-sm sm:text-base"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors duration-300"
+                className="px-3 py-2 sm:py-1 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors duration-300 text-sm sm:text-base"
               >
                 Save
               </button>

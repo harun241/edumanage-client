@@ -89,7 +89,7 @@ const AllClasses = () => {
 
       <div className="my-5 flex justify-between items-center">
         <Link to="/">
-          <button className="btn bg-blue-500 text-white">Back to Home</button>
+          <button className="btn bg-sky-400 hover:bg-sky-700 text-white">Back to Home</button>
         </Link>
 
         {/* Sorting Dropdown */}
@@ -140,7 +140,7 @@ const AllClasses = () => {
               {role === "student" && cls.status === "approved" && (
                 <Link
                   to={`/all-classes/class/${cls._id}`}
-                  className="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+                  className="inline-block px-4 py-2  text-white rounded btn bg-sky-400 hover:bg-sky-700 dark:bg-sky-500 dark:hover:bg-sky-700"
                 >
                   Enroll Now
                 </Link>

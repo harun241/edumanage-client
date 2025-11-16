@@ -1,5 +1,6 @@
 // src/pages/Contact.jsx
 import React, { useState } from "react";
+import { Link } from "react-router";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -25,6 +26,13 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+          <div className=" mt-5">
+  <Link to={'/'}>
+    <button className="btn bg-sky-400 hover:bg-sky-700 text-white">
+      Back To Home
+    </button>
+  </Link>
+</div>
       <section className="py-20 px-4 max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold text-center mb-8">Contact Us</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
@@ -95,11 +103,12 @@ const Contact = () => {
             ></textarea>
             <button
               type="submit"
-              className="w-full py-3 px-6 bg-blue-500 text-white rounded-xl font-semibold hover:bg-blue-600 transition"
+              className="w-full py-3 px-6 bg-sky-400 text-white rounded-xl font-semibold hover:bg-sky-700 transition"
             >
               Send Message
             </button>
           </form>
+        
         </div>
       </section>
       

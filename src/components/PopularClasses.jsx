@@ -7,7 +7,7 @@ const PopularClasses = () => {
   const [popularClasses, setPopularClasses] = useState([]);
 
   useEffect(() => {
-    fetch("https://edumanage-server-rho.vercel.app/api/popular-classes") // Replace with your API
+    fetch("https://edumanage-server-rho.vercel.app/api/popular-classes")
       .then((res) => res.json())
       .then((data) => setPopularClasses(data));
   }, []);
@@ -20,45 +20,72 @@ const PopularClasses = () => {
     slidesToScroll: 1,
     autoplay: true,
     responsive: [
-      {
-        breakpoint: 1024,
-        settings: { slidesToShow: 2 }
-      },
-      {
-        breakpoint: 640,
-        settings: { slidesToShow: 1 }
-      }
+      { breakpoint: 1024, settings: { slidesToShow: 2 } },
+      { breakpoint: 640, settings: { slidesToShow: 1 } }
     ]
   };
 
   return (
-    <section className="my-12 px-4 md:px-12">
-      <h2 className="text-3xl font-bold text-center mb-8 text-black dark:text-white">
+    <section className="my-16 px-4 md:px-12">
+      <h2 className="text-4xl font-extrabold text-center mb-10 
+      text-gray-900 dark:text-white tracking-wide">
         🌟 Popular Classes
       </h2>
+
       {popularClasses.length > 0 ? (
         <Slider {...settings}>
           {popularClasses.map((cls) => (
-            <div key={cls._id} className="p-2">
-              <div className="bg-white shadow-md rounded-xl overflow-hidden">
-                <img
-                  src={cls.image}
-                  alt={cls.title}
-                  className="h-88 w-full object-cover"
-                />
-                <div className="p-4">
-                  <h3 className="text-xl font-semibold text-gray-800">{cls.title}</h3>
-                  <p className="text-sm text-gray-500">Instructor: {cls.instructor}</p>
-                  <p className="text-sm mt-2 text-green-600">
-                    Enrolled: {cls.studentsEnrolled}
+            <div key={cls._id} className="p-4">
+              <div
+                className="
+                group
+                bg-white/80 dark:bg-gray-800/80 
+                backdrop-blur-lg 
+                border border-gray-200 dark:border-gray-700
+                rounded-3xl 
+                shadow-lg 
+                overflow-hidden 
+                transition-all duration-500 
+                hover:shadow-2xl 
+                hover:-translate-y-2
+                hover:bg-white dark:hover:bg-gray-700
+                "
+              >
+                <div className="overflow-hidden">
+                  <img
+                    src={cls.image}
+                    alt={cls.title}
+                    className="
+                      h-64 w-full object-cover 
+                      transition-transform duration-500 
+                      group-hover:scale-105
+                    "
+                  />
+                </div>
+
+                <div className="p-5">
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
+                    {cls.title}
+                  </h3>
+
+                  <p className="text-gray-500 dark:text-gray-300 text-sm">
+                    👨‍🏫 {cls.instructor}
                   </p>
+
+                  <p className="text-green-600 dark:text-green-400 font-semibold text-sm mt-3">
+                    ✓ Enrolled: {cls.studentsEnrolled}
+                  </p>
+
+                 
                 </div>
               </div>
             </div>
           ))}
         </Slider>
       ) : (
-        <p className="text-center text-gray-500">No popular classes found.</p>
+        <p className="text-center text-gray-500 dark:text-gray-300">
+          No popular classes found.
+        </p>
       )}
     </section>
   );

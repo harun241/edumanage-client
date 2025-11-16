@@ -48,6 +48,8 @@ import Chart from "../components/Chart";
 import About from "../components/About";
 import Contact from "../components/Contact";
 import ErrorPage from "../Pages/ErrorPage";
+import Blog from "../components/Blogs";
+import BlogSection from "../components/BlogSection";
 
 const stripePromise = loadStripe("pk_test_51Rm3ScQZQai0rO82528C1QcnbC7n1PUdkiZP2qotPdfRQRNWKPZSPP36tZ6NEB6eyqi2pbLHxmw7EJZSIC0BIQWS00HnTTXDCt");
 
@@ -61,6 +63,8 @@ export const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: "about", element: <About /> },
       { path: "contact", element: <Contact /> },
+      { path: "blogs", element: <Blog /> },            // ← add this
+    { path: "blog/:id", element: <BlogSection /> },         // ← blog details route
     ],
   },
 
