@@ -28,7 +28,9 @@ const Contact = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
           <div className=" mt-5">
   <Link to={'/'}>
-    <button className="btn bg-sky-400 hover:bg-sky-700 text-white">
+    <button className="mt-4 px-6 py-3 text-lg font-semibold rounded-xl 
+                bg-gradient-to-r from-sky-500 to-blue-700 text-white shadow-lg 
+                hover:shadow-blue-400/50 transition-all duration-300">
       Back To Home
     </button>
   </Link>
@@ -103,7 +105,9 @@ const Contact = () => {
             ></textarea>
             <button
               type="submit"
-              className="w-full py-3 px-6 bg-sky-400 text-white rounded-xl font-semibold hover:bg-sky-700 transition"
+              className="mt-4 w-full px-6 py-3 text-lg font-semibold rounded-xl 
+                bg-gradient-to-r from-sky-500 to-blue-700 text-white shadow-lg 
+                hover:shadow-blue-400/50 transition-all duration-300"
             >
               Send Message
             </button>

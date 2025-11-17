@@ -83,13 +83,15 @@ const AllClasses = () => {
 
   return (
     <div className="px-4 py-8 max-w-7xl mx-auto">
-      <h1 className="font-bold text-center text-4xl mb-6 text-gray-900 dark:bg-gray-800 py-2 dark:text-gray-100">
+      <h1 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
         All Classes
       </h1>
 
       <div className="my-5 flex justify-between items-center">
         <Link to="/">
-          <button className="btn bg-sky-400 hover:bg-sky-700 text-white">Back to Home</button>
+          <button className="mt-4 px-6 py-3 text-lg font-semibold rounded-xl 
+                bg-gradient-to-r from-sky-500 to-blue-700 text-white shadow-lg 
+                hover:shadow-blue-400/50 transition-all duration-300">Back to Home</button>
         </Link>
 
         {/* Sorting Dropdown */}
@@ -171,7 +173,9 @@ const AllClasses = () => {
 
       <div className="flex justify-center items-center mt-10">
         <Link to="/">
-          <button className="btn bg-sky-400 hover:bg-sky-700 text-white">
+          <button className="mt-4 px-6 py-3 text-lg font-semibold rounded-xl 
+                bg-gradient-to-r from-sky-500 to-blue-700 text-white shadow-lg 
+                hover:shadow-blue-400/50 transition-all duration-300">
             Back to Home
           </button>
         </Link>

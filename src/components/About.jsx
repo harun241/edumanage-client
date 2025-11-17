@@ -11,12 +11,14 @@ const teamMembers = [
 
 const About = () => {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <div className="min-h-screen    ">
       
       {/* Back Button */}
       <div className="my-6 px-4 max-w-7xl mx-auto">
         <Link to="/">
-          <button className="btn bg-sky-500 hover:bg-sky-600 text-white font-medium rounded-lg px-5 py-2 transition">
+          <button className="mt-4 px-6 py-3 text-lg font-semibold rounded-xl 
+                bg-gradient-to-r from-sky-500 to-blue-700 text-white shadow-lg 
+                hover:shadow-blue-400/50 transition-all duration-300">
             ← Back To Home
           </button>
         </Link>
@@ -25,32 +27,32 @@ const About = () => {
       {/* Hero Section */}
       <section className=" py-24">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            About EduManage
+          <h1 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+            About EduQuest
           </h1>
-          <p className="text-lg md:text-xl text-white/90">
-            EduManage is a modern platform for managing classes, teachers, and students efficiently.
+          <p className="">
+            EduQuest is a modern platform for managing classes, teachers, and students efficiently.
           </p>
         </div>
       </section>
 
       {/* About Content */}
       <section className="py-16 px-4 max-w-5xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-semibold mb-6 text-center">Who We Are</h2>
+        <h2 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Who We Are</h2>
         <p className="text-gray-700 dark:text-gray-300 max-w-3xl mx-auto text-center mb-6 leading-relaxed">
-          EduManage is designed to simplify education management for students, teachers, and admins. 
+          EduQuest is designed to simplify education management for students, teachers, and admins. 
           Our platform offers class management, enrollment tracking, real-time dashboards, and intuitive 
           interfaces to help educators and learners thrive in a seamless digital environment.
         </p>
         <p className="text-gray-700 dark:text-gray-300 max-w-3xl mx-auto text-center leading-relaxed">
           Whether you are a student looking to enroll in new courses, a teacher managing your classes, 
-          or an admin overseeing the platform, EduManage provides all the tools you need in one centralized hub.
+          or an admin overseeing the platform, EduQuest provides all the tools you need in one centralized hub.
         </p>
       </section>
 
       {/* Team / Contributors */}
       <section className="py-16 px-4 max-w-7xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-semibold mb-10 text-center">Our Team</h2>
+        <h2 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Our Team</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           {teamMembers.map((member, idx) => (
             <div
@@ -69,13 +71,15 @@ const About = () => {
 
       {/* Call to Action */}
       <section className="py-20 px-4  text-white text-center rounded-t-3xl">
-        <h2 className="text-3xl md:text-4xl font-semibold mb-4">Join EduManage Today</h2>
+        <h2 className="text-3xl md:text-4xl font-semibold mb-4">Join EduQuest Today</h2>
         <p className="mb-8 max-w-3xl mx-auto leading-relaxed">
           Sign up to explore classes, manage your courses, and be part of our growing education community.
         </p>
         <Link
           to="/auth/register"
-          className="px-8 py-3 bg-white text-sky-500 font-semibold rounded-lg shadow-lg hover:bg-gray-100 transition"
+          className="mt-4 px-6 py-3 text-lg font-semibold rounded-xl 
+                bg-gradient-to-r from-sky-500 to-blue-700 text-white shadow-lg 
+                hover:shadow-blue-400/50 transition-all duration-300"
         >
           Get Started
         </Link>

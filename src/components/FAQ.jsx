@@ -34,7 +34,7 @@ function FAQSection() {
   return (
     <section className="py-16 ">
       <div className="max-w-4xl mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-10">
+        <h2 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
           Frequently Asked Questions
         </h2>
         <div className="space-y-4">

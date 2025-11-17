@@ -11,6 +11,7 @@ import TopInstructor from '../components/TopInstructor';
 import StudentStories from '../components/StudentStories';
 import BlogSection from '../components/Blogs';
 import FAQSection from '../components/FAQ';
+import StudentSuggestion from '../components/StudentSuggestion';
 
 const Home = () => {
     return (
@@ -18,6 +19,7 @@ const Home = () => {
             <Navbar></Navbar>
             <Banner></Banner>
             <BeInstructor></BeInstructor>
+            <StudentSuggestion></StudentSuggestion>
             <WebStats></WebStats>
             <PopularClasses></PopularClasses>
             <TopInstructor></TopInstructor>

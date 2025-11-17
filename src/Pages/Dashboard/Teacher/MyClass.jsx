@@ -123,7 +123,7 @@ const MyClass = () => {
 
   return (
     <div className="p-4 sm:p-6 md:p-8 bg-white dark:bg-gray-900 min-h-screen transition-colors duration-300">
-      <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center text-gray-900 dark:text-gray-100 transition-colors duration-300">
+      <h2 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
         My Classes
       </h2>
       {classes.length === 0 ? (
@@ -179,13 +179,17 @@ const MyClass = () => {
                 <div className="mt-auto flex flex-col sm:flex-row gap-2 pt-4">
                   <button
                     onClick={() => setSelectedClass(cls)}
-                    className="px-3 py-2 sm:py-1 bg-sky-400 hover:bg-sky-700 text-white rounded flex-1 transition-colors duration-300 text-sm sm:text-base"
+                    className="mt-4 px-2 py-3 text-lg font-semibold rounded-xl 
+                bg-gradient-to-r from-sky-500 to-blue-700 text-white shadow-lg 
+                hover:shadow-blue-400/50 transition-all duration-300"
                   >
                     Update
                   </button>
                   <button
                     onClick={() => handleDelete(cls._id)}
-                    className="px-3 py-2 sm:py-1 bg-red-500 hover:bg-red-800 text-white rounded flex-1 transition-colors duration-300 text-sm sm:text-base"
+                    className="mt-4 px-2 py-3 text-lg font-semibold rounded-xl 
+                bg-gradient-to-r from-red-500 to-red-800 text-white shadow-lg 
+                hover:shadow-blue-400/50 transition-all duration-300"
                   >
                     Delete
                   </button>
@@ -194,13 +198,18 @@ const MyClass = () => {
                     onClick={() =>
                       navigate(`/dashboard/teacher/my-classes/${cls._id}`)
                     }
-                    className={`px-3 py-2 sm:py-1 flex-1 text-white rounded transition-colors duration-300 text-sm sm:text-base ${
-                      cls.status === "approved"
-                        ? "bg-green-500 hover:bg-green-700"
-                        : "bg-gray-400 cursor-not-allowed"
-                    }`}
+                  className={` mt-4 px-2 py-3 text-lg font-semibold rounded-xl 
+                bg-gradient-to-r from-green-500 to-green-800 text-white shadow-lg 
+                hover:shadow-blue-400/50 transition-all duration-300
+  ${
+    cls.status === "approved"
+      ? ""
+      : "bg-gray-400 text-gray-700 shadow-none hover:shadow-none cursor-not-allowed"
+  }
+`}
+
                   >
-                    See Details
+                    Details
                   </button>
                 </div>
               </div>

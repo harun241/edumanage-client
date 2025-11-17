@@ -1,7 +1,8 @@
 import React from "react";
 
 const EduManage = () => (
-  <div className="flex items-center gap-4">
+  <div className="flex items-center gap-4 overflow-hidden">
+
     {/* Animated Logo */}
     <svg
       width="64"
@@ -9,19 +10,20 @@ const EduManage = () => (
       viewBox="0 0 64 64"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="animate-spin-slow"
+      className="logo-move-rotate"
     >
       {/* Graduation Cap */}
       <path
-        d="M32 8L56 20L32 32L8 20L32 8Z"
+        d="M42 8L48 20L32 32L2 20L32"
         fill="url(#orangeGradient)"
       />
       <path
         d="M32 32V48"
-        stroke="#F97388"
+        stroke="#F973"
         strokeWidth="4"
         strokeLinecap="round"
       />
+
       {/* Circle Accent */}
       <circle
         cx="48"
@@ -38,7 +40,7 @@ const EduManage = () => (
         strokeLinecap="round"
       />
 
-      {/* Gradient Definition */}
+      {/* Gradient */}
       <defs>
         <linearGradient
           id="orangeGradient"
@@ -54,11 +56,41 @@ const EduManage = () => (
       </defs>
     </svg>
 
-    {/* Brand Name with staggered bounce */}
-    <h1 className="text-3xl font-extrabold flex space-x-2">
-      <span className="text-blue-800 animate-bounce-alternate">Edu</span>
-      <span className="text-green-500 animate-bounce-alternate-delay">Quest</span>
+    {/* Brand Text */}
+    <h1 className="text-3xl font-extrabold flex gap-2">
+      <span className="text-blue-800 animate-bounce-text">Edu</span>
+      <span className="text-green-500 animate-bounce-text-delay">Quest</span>
     </h1>
+
+    {/* Custom Animations */}
+    <style>{`
+      /* Logo move left to right and rotate */
+      @keyframes moveRotate {
+        0%   { transform: translateX(-100px) rotate(0deg); }
+        50%  { transform: translateX(100px) rotate(180deg); }
+        100% { transform: translateX(-100px) rotate(360deg); }
+      }
+
+      .logo-move-rotate {
+        animation: moveRotate 4s linear infinite;
+        transform-origin: center;
+      }
+
+      /* Text bounce */
+      @keyframes bounceText {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+      }
+
+      .animate-bounce-text {
+        animation: bounceText 1s ease-in-out infinite;
+      }
+
+      .animate-bounce-text-delay {
+        animation: bounceText 1s ease-in-out infinite;
+        animation-delay: 0.5s;
+      }
+    `}</style>
   </div>
 );
 

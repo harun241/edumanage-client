@@ -38,7 +38,7 @@ const StudentStories = () => {
   return (
     <section className="py-20">
       <div className="max-w-screen-xl mx-auto px-4 text-center">
-        <h2 className="text-4xl font-extrabold mb-12 text-gray-900 dark:text-white tracking-wide">
+        <h2 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
           🌟 Student Success Stories
         </h2>
 

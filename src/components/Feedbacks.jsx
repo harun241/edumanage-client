@@ -38,7 +38,7 @@ const Feedbacks = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-6">
-      <h2 className="text-3xl font-bold mb-8 text-center text-gray-900 dark:text-gray-100">
+      <h2 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
         Teacher Feedbacks
       </h2>
       <Slider {...settings}>

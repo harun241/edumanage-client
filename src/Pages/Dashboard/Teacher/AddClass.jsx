@@ -58,7 +58,7 @@ const AddClass = () => {
 
   return (
     <div className="max-w-xl mx-auto p-6 rounded shadow-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-      <h2 className="text-2xl font-semibold mb-6 text-center">Add a New Class</h2>
+      <h2 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Add a New Class</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         {/* Title */}
         <div>
@@ -133,7 +133,9 @@ const AddClass = () => {
         {/* Submit */}
         <button
           type="submit"
-          className={`w-full bg-sky-400 hover:bg-sky-700 text-white font-semibold py-3 rounded transition ${
+          className={`mt-4 w-full px-6 py-3 text-lg font-semibold rounded-xl 
+                bg-gradient-to-r from-sky-500 to-blue-700 text-white shadow-lg 
+                hover:shadow-blue-400/50 transition-all duration-300 ${
             isPending ? "opacity-50 cursor-not-allowed" : ""
           }`}
           disabled={isPending}
