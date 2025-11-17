@@ -75,7 +75,7 @@ const Login = () => {
           />
         </div>
 
-        <button type="submit" className="mt-4 px-6 py-3 text-lg font-semibold rounded-xl 
+        <button type="submit" className="mt-4 w-full px-6 py-3 text-lg font-semibold rounded-xl 
                 bg-gradient-to-r from-sky-500 to-blue-700 text-white shadow-lg 
                 hover:shadow-blue-400/50 transition-all duration-300">
           Login
